@@ -33,6 +33,7 @@ def train(request):
     if request.method == "POST":
         if df_json:
             df = pd.read_json(io.StringIO(df_json))
+            test_rate = float(request.POST.get('split_ratio', 0.2))
             X = df.iloc[:, :-1]
             y = df.iloc[:, -1]
 
@@ -41,22 +42,19 @@ def train(request):
                 y = le.fit_transform(y)
             
             model_type = request.POST.get('model_type')
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_rate, random_state=42)
             
             if model_type.lower() == 'rfc':
                 model = RandomForestClassifier()
-                model.fit(X_train, y_train)
             elif model_type.lower() == 'svm': 
                 model = SVC() 
-                model.fit(X_train, y_train)
             elif model_type.lower() == 'knn': 
                 model = KNeighborsClassifier()
-                model.fit(X_train, y_train) 
             elif model_type.lower() == 'dtc': 
                 model = DecisionTreeClassifier() 
-                model.fit(X_train, y_train) 
 
             
+            model.fit(X_train, y_train)
             context['score'] = model.score(X_test, y_test)
             context['model_run'] = True
             
