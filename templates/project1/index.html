@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box" style="padding: 20px;">
+    <h2>Project 1: Machine Learning Interface</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin: 20px 0;">
+            <label>CSV Dosyası Yükle:</label>
+            <input type="file" name="csv_file" accept=".csv">
+            <button type="submit" style="width: auto; padding: 0 15px;">Veriyi Yükle</button>
+        </div>
+    </form>
+
+    {% if chart_data %}
+        <hr>
+        <h3>Veri Görselleştirme (İlk 2 Sütun)</h3>
+        <div style="position: relative; height:40vh; width:80vw; margin: auto;">
+            <canvas id="myChart"></canvas>
+        </div>
+        
+        <hr>
+        <form method="post" action="{% url 'project1:train' %}">
+            {% csrf_token %}
+            <h3>Makine Öğrenmesi Modeli</h3>
+            <div style="margin-bottom: 15px;">
+                <label>Model Türü:</label>
+                <select name="model_type" style="padding: 5px;">
+                    <option value="rfc">Random Forest (Sınıflandırma)</option>
+                    <option value="lr">Lineer Regresyon</option>
+                </select>
+            </div>
+            <button type="submit" style="width: auto; padding: 0 15px;">Modeli Eğit</button>
+        </form>
+    {% endif %}
+
+    {% if score is not None %}
+        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 5px; color: #333;">
+            <strong>Model Başarı Skoru:</strong> {{ score|floatformat:4 }}
+        </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Veriyi JavaScript tarafında güvenli bir şekilde yakalayalım
+    document.addEventListener('DOMContentLoaded', function() {
+        const chartElement = document.getElementById('myChart');
+        
+        // Django'dan gelen veriyi string olarak alıp JSON.parse ile objeye çevirmek en güvenli yoldur
+        const rawData = '{{ chart_data|safe }}';
+        
+        if (chartElement && rawData && rawData !== 'None' && rawData !== '') {
+            try {
+                // Veriyi temizleyip parse ediyoruz
+                const formattedData = JSON.parse(rawData.replace(/'/g, '"'));
+                
+                const ctx = chartElement.getContext('2d');
+                new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Veri Noktaları (Sütun 1 vs Sütun 2)',
+                            data: formattedData,
+                            backgroundColor: '#275CB2',
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { type: 'linear', position: 'bottom', title: { display: true, text: 'X Ekseni' } },
+                            y: { title: { display: true, text: 'Y Ekseni' } }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Grafik verisi işlenirken hata oluştu:", e);
+            }
+        }
+    });
+</script>
+{% endblock %}

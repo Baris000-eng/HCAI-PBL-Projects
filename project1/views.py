@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression
+import json 
 
 def index(request):
     context = {}
@@ -11,10 +12,10 @@ def index(request):
         df = pd.read_csv(csv_file)
         
         chart_data = []
-        for i in range(min(len(df), 100)): 
+        for i in range(min(len(df), 150)): 
             chart_data.append({'x': float(df.iloc[i, 0]), 'y': float(df.iloc[i, 1])})
         
-        context['chart_data'] = chart_data
+        context['chart_data'] = json.dumps(chart_data)
         context['columns'] = df.columns.tolist()
         
         request.session['df_json'] = df.to_json()
