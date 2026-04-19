@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box" style="padding: 30px; max-width: 1000px; margin: auto;">
+    <h2 style="color: #275CB2; border-bottom: 2px solid #275CB2; padding-bottom: 10px;">
+        Model Performance Results:
+    </h2>
+
+    <div style="margin-top: 25px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            {% if accuracy %}
+                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; border-left: 5px solid #275CB2; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <span style="color: #666; font-size: 0.9em; font-weight: bold;">Accuracy</span><br>
+                    <strong style="font-size: 1.5em; color: #275CB2;">{{ accuracy|floatformat:5 }}</strong>
+                </div>
+            {% endif %}
+            
+            {% if precision %}
+                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; border-left: 5px solid #275CB2; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <span style="color: #666; font-size: 0.9em; font-weight: bold;">Precision</span><br>
+                    <strong style="font-size: 1.5em; color: #275CB2;">{{ precision|floatformat:5 }}</strong>
+                </div>
+            {% endif %}
+            
+            {% if recall %}
+                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; border-left: 5px solid #275CB2; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <span style="color: #666; font-size: 0.9em; font-weight: bold;">Recall</span><br>
+                    <strong style="font-size: 1.5em; color: #275CB2;">{{ recall|floatformat:5 }}</strong>
+                </div>
+            {% endif %}
+            
+            {% if f1_score %}
+                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; border-left: 5px solid #275CB2; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <span style="color: #666; font-size: 0.9em; font-weight: bold;">F1-Score</span><br>
+                    <strong style="font-size: 1.5em; color: #275CB2;">{{ f1_score|floatformat:5 }}</strong>
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+            {% if classification_report %}
+            <div style="flex: 1; min-width: 350px;">
+                <h4 style="color: #333;">Classification Report</h4>
+                <pre style="background: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Courier New', Courier, monospace; line-height: 1.5; overflow-x: auto;">{{ classification_report }}</pre>
+            </div>
+            {% endif %}
+
+            {% if confusion_matrix %}
+            <div style="flex: 1; min-width: 300px;">
+                <h4 style="color: #333;">Confusion Matrix</h4>
+                <table style="width: 100%; border-collapse: collapse; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <thead style="background: #275CB2; color: white;">
+                        <tr>
+                            <th colspan="100%" style="padding: 10px;">Predicted Labels</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in confusion_matrix %}
+                            <tr>
+                                {% for cell in row %}
+                                    <td style="padding: 15px; background: white; border: 1px solid #eee; font-weight: bold; color: #275CB2;">{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p style="font-size: 0.8em; color: #888; margin-top: 10px;">Rows: Actual Classes | Columns: Predicted Classes</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <a href="{% url 'project1:index' %}" style="display: inline-block; padding: 12px 25px; background: #275CB2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            ← Back to File Upload
+        </a>
+    </div>
+</div>
+{% endblock %}

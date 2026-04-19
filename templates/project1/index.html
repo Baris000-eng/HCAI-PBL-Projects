@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="box" style="padding: 20px;">
-    <h2>Project 1: Machine Learning Interface</h2>
+    <h2>Project 1: Supervised Machine Learning Interface</h2>
     
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div style="margin: 20px 0;">
-            <label>CSV Dosyası Yükle:</label>
+            <label>Upload CSV File:</label>
             <input type="file" name="csv_file" accept=".csv">
-            <button type="submit" style="width: auto; padding: 0 15px;">Veriyi Yükle</button>
+            <button type="submit" style="width: auto; padding: 0 15px;">Upload Data</button>
         </div>
     </form>
 
     {% if chart_data %}
         <hr>
-        <h3>Veri Görselleştirme (First 2 Columns)</h3>
+        <h3>Data Visualization (First 2 Columns)</h3>
         <div style="position: relative; height:40vh; width:80vw; margin: auto;">
             <canvas id="myChart"></canvas>
         </div>
@@ -33,24 +33,28 @@
                 </select>
             </div>
             <div style="margin-top: 20px; margin-bottom: 20px;">
-                <label for="split_ratio"><strong>Test Verisi Oranı:</strong></label>
+                <label for="split_ratio"><strong>Test Data Split Ratio:</strong></label>
                     <input type="range" name="split_ratio" id="split_ratio" 
-                        min="0.1" max="0.5" step="0.05" value="0.2" 
+                        min="0.1" max="0.7" step="0.05" value="0.2" 
                         oninput="this.nextElementSibling.value = (this.value * 100).toFixed(0) + '%'">
                     <output>20%</output>
                 <br>
-                <small>(Recommended: %20 - %30)</small>
+                <small>(Recommended Range: %20 - %30)</small>
+            </div>
+            <div style="margin-top: 20px;">
+            <strong>Select Evaluation Metrics:</strong><br>
+                <div style="display: flex; gap: 15px; margin-top: 10px;">
+                    <label><input type="checkbox" name="metrics" value="accuracy"> Accuracy</label>
+                    <label><input type="checkbox" name="metrics" value="precision"> Precision</label>
+                    <label><input type="checkbox" name="metrics" value="recall"> Recall</label>
+                    <label><input type="checkbox" name="metrics" value="f1_score"> F1-Score</label>
+                    <label><input type="checkbox" name="metrics" value="classification_report">Classification Report</label>
+                    <label><input type="checkbox" name="metrics" value="confusion_matrix"> Confusion Matrix</label>
+                </div>
             </div>
             <button type="submit" style="width: auto; padding: 0 15px;">Train The Model</button>
         </form>
     {% endif %}
-
-    {% if score is not None %}
-        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 5px; color: #333;">
-            <strong>Model Accuracy Score:</strong> {{ score|floatformat:4 }}
-        </div>
-    {% endif %}
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -69,7 +73,7 @@
                     type: 'scatter',
                     data: {
                         datasets: [{
-                            label: 'Veri Noktaları (Sütun 1 vs Sütun 2)',
+                            label: 'Data Points (Column 1 vs Column 2)',
                             data: formattedData,
                             backgroundColor: '#275CB2',
                             pointRadius: 5
@@ -85,7 +89,7 @@
                     }
                 });
             } catch (e) {
-                console.error("Grafik verisi işlenirken hata oluştu:", e);
+                console.error("An error occurred while processing the graph data", e);
             }
         }
     });
