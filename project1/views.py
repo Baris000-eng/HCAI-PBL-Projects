@@ -10,6 +10,8 @@ from sklearn.preprocessing import LabelEncoder
 import json 
 import io 
 
+from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix)
+
 def index(request):
     context = {}
     if request.method == "POST" and request.FILES.get('csv_file'):
