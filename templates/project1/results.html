@@ -10,25 +10,25 @@
     <div class="metrics-grid">
         {% if accuracy %}
             <div class="metric-card">
-                <span class="metric-label">Accuracy</span><br>
+                <span class="metric-label">Accuracy:</span><br>
                 <strong class="metric-value">{{ accuracy|floatformat:5 }}</strong>
             </div>
         {% endif %}
         {% if precision %}
             <div class="metric-card">
-                <span class="metric-label">Precision</span><br>
+                <span class="metric-label">Precision:</span><br>
                 <strong class="metric-value">{{ precision|floatformat:5 }}</strong>
             </div>
         {% endif %}
         {% if recall %}
             <div class="metric-card">
-                <span class="metric-label">Recall</span><br>
+                <span class="metric-label">Recall:</span><br>
                 <strong class="metric-value">{{ recall|floatformat:5 }}</strong>
             </div>
         {% endif %}
         {% if f1_score %}
             <div class="metric-card">
-                <span class="metric-label">F1-Score</span><br>
+                <span class="metric-label">F1-Score:</span><br>
                 <strong class="metric-value">{{ f1_score|floatformat:5 }}</strong>
             </div>
         {% endif %}
@@ -37,14 +37,14 @@
     <div class="reports-wrapper">
         {% if classification_report %}
             <div class="report-section">
-                <h4 class="report-title">Classification Report</h4>
+                <h4 class="report-title">Classification Report:</h4>
                 <pre class="classification-pre">{{ classification_report }}</pre>
             </div>
         {% endif %}
 
         {% if confusion_matrix %}
             <div class="matrix-container">
-                <h4 class="report-title">Confusion Matrix</h4>
+                <h4 class="report-title">Confusion Matrix:</h4>
                 <table class="matrix-table">
                     <thead class="matrix-thead">
                         <tr>

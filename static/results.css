@@ -21,11 +21,11 @@
     background: #e7f3ff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px black;
 }
 
 .metric-label {
-    color: #666;
+    color: black;
     font-size: 18px;
     font-weight: bold;
 }
@@ -50,7 +50,7 @@
 }
 
 .report-title {
-    color: #333;
+    color: black;
     font-size: 18px;
     margin-bottom: 10px;
 }
@@ -61,7 +61,7 @@
     box-sizing: border-box;
     max-height: 400px;
     background: #f8f9fa;
-    color: #333;
+    color: black;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -82,7 +82,7 @@
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px black;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -96,12 +96,12 @@
     padding: 12px;
     font-weight: bold;
     font-size: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid black;
 }
 
 .matrix-sub-header {
     padding: 10px;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid black;
     font-size: 16px;
     font-weight: bold;
 }
@@ -109,7 +109,7 @@
 .matrix-row-label {
     padding: 15px;
     background: #1e468a;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid black;
     font-weight: bold;
     color: white;
 }
