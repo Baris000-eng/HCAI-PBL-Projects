@@ -1,105 +1,88 @@
-{% extends 'base.html' %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'results.css' %}">
+</head>
 
 {% block content %}
-<div class="box" style="padding: 30px; max-width: 1000px; margin: auto;">
-    <h2 style="color: #1e468a; padding-bottom: 10px;">
-        Model Performance Results
-    </h2>
+<div class="results-container">
+    <h2 class="results-title">Model Performance Results</h2>
 
-    <div style="margin-top: 25px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            {% if accuracy %}
-                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 18px; font-weight: bold;">Accuracy</span><br>
-                    <strong style="font-size: 18px; color: #1e468a;">{{ accuracy|floatformat:5 }}</strong>
-                </div>
-            {% endif %}
-            
-            {% if precision %}
-                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 18px; font-weight: bold;">Precision</span><br>
-                    <strong style="font-size: 18px; color: #1e468a;">{{ precision|floatformat:5 }}</strong>
-                </div>
-            {% endif %}
-            
-            {% if recall %}
-                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 18px; font-weight: bold;">Recall</span><br>
-                    <strong style="font-size: 18px; color: #1e468a;">{{ recall|floatformat:5 }}</strong>
-                </div>
-            {% endif %}
-            
-            {% if f1_score %}
-                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 18px; font-weight: bold;">F1-Score</span><br>
-                    <strong style="font-size: 18px; color: #1e468a;">{{ f1_score|floatformat:5 }}</strong>
-                </div>
-            {% endif %}
-        </div>
+    <div class="metrics-grid">
+        {% if accuracy %}
+            <div class="metric-card">
+                <span class="metric-label">Accuracy</span><br>
+                <strong class="metric-value">{{ accuracy|floatformat:5 }}</strong>
+            </div>
+        {% endif %}
+        {% if precision %}
+            <div class="metric-card">
+                <span class="metric-label">Precision</span><br>
+                <strong class="metric-value">{{ precision|floatformat:5 }}</strong>
+            </div>
+        {% endif %}
+        {% if recall %}
+            <div class="metric-card">
+                <span class="metric-label">Recall</span><br>
+                <strong class="metric-value">{{ recall|floatformat:5 }}</strong>
+            </div>
+        {% endif %}
+        {% if f1_score %}
+            <div class="metric-card">
+                <span class="metric-label">F1-Score</span><br>
+                <strong class="metric-value">{{ f1_score|floatformat:5 }}</strong>
+            </div>
+        {% endif %}
+    </div>
 
-        <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-top: 25px; font-family: 'Times New Roman';">
-            
+    <div class="reports-wrapper">
         {% if classification_report %}
-            <div style="flex: 1; min-width: 350px; max-width: 100%;">
-                <h4 style="color: #333; font-size: 18px; margin-bottom: 10px;">Classification Report</h4>
-                <pre style="display: block; width: 100%; box-sizing: border-box; max-height: 400px; 
-                            background: #f8f9fa; color: #333; padding: 20px; border: 1px solid #ddd; border-radius: 8px;
-                            font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.2; overflow-x: auto; white-space: pre; word-wrap: normal;">{{ classification_report }}</pre>
+            <div class="report-section">
+                <h4 class="report-title">Classification Report</h4>
+                <pre class="classification-pre">{{ classification_report }}</pre>
             </div>
         {% endif %}
 
         {% if confusion_matrix %}
-        <div style="flex: 1; min-width: 500px;">
-                <h4 style="color: #333; margin-bottom: 15px; font-size: 18px; font-weight: bold">Confusion Matrix</h4>
-            
-                <table style="width: 100%; border-collapse: collapse; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
-                    <thead style="background: #1e468a; color: white;">
+            <div class="matrix-container">
+                <h4 class="report-title">Confusion Matrix</h4>
+                <table class="matrix-table">
+                    <thead class="matrix-thead">
                         <tr>
                             <th style="background: transparent; border: none;"></th>
-                            <th colspan="3" style="padding: 12px; font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                            Predicted Labels <br>(Predicted Species)
-                            </th>
+                            <th colspan="3" class="matrix-header-main">Predicted Labels <br>(Predicted Species)</th>
                         </tr>
-                            <tr style="font-size: 16px; font-weight: bold">
-                            <th style="padding: 10px; border-right: 1px solid rgba(255,255,255,0.1);">Actual Labels <br> (Actual Species)</th>
-                            <th style="padding: 10px;">Setosa</th>
-                            <th style="padding: 10px;">Versicolor</th>
-                            <th style="padding: 10px;">Virginica</th>
+                        <tr class="matrix-sub-header">
+                            <th class="matrix-sub-header">Actual Labels <br> (Actual Species)</th>
+                            <th>Setosa</th>
+                            <th>Versicolor</th>
+                            <th>Virginica</th>
                         </tr>
                     </thead>
-                 
-                <tbody>
-                {% for row in confusion_matrix %}
-                    <tr>
-                        <td style="padding: 15px; background: #1e468a; border: 1px solid rgba(255,255,255,0.1); font-weight: bold; color: white;">
-                            {% if forloop.counter == 1 %}Setosa
-                            {% elif forloop.counter == 2 %}Versicolor
-                            {% elif forloop.counter == 3 %}Virginica{% endif %}
-                        </td>
-                
-                        {% for cell in row %}
-                            <td style="padding: 15px; background: white; border: 1px solid #eee; font-size: 16px; color: #1e468a; font-weight: bold">
-                                <span style="background: #e7f3ff; padding: 8px 12px; display: inline-block; border-radius: 5px; min-width: 30px;">
-                                    {{ cell }}
-                                </span>
-                            </td>
+                    <tbody>
+                        {% for row in confusion_matrix %}
+                            <tr>
+                                <td class="matrix-row-label">
+                                    {% if forloop.counter == 1 %}Setosa
+                                    {% elif forloop.counter == 2 %}Versicolor
+                                    {% elif forloop.counter == 3 %}Virginica{% endif %}
+                                </td>
+                                {% for cell in row %}
+                                    <td class="matrix-cell">
+                                        <span class="cell-box">{{ cell }}</span>
+                                    </td>
+                                {% endfor %}
+                            </tr>
                         {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endif %}
-
-</div>
-        </div>
-   <div style="margin-top: 40px; text-align: center;">
-    <a href="{% url 'project1:index' %}"; style="text-decoration: none">
-            <button type="button" style="color: white; font-weight: bold; font-size: 16px">
-                Back to File Upload
-            </button>
-    </a>
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
+
+    <div class="footer-container">
+        <a href="{% url 'project1:index' %}" style="text-decoration: none">
+            <button type="button" class="back-button">Back to File Upload</button>
+        </a>
     </div>
 </div>
 {% endblock %}

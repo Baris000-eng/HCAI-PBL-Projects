@@ -1,0 +1,62 @@
+.train-config-container {
+    padding: 20px;
+    margin: auto;
+    background-color: lightblue;
+    height: 100vh;
+}
+
+.config-title {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.label-text {
+    font-weight: bold;
+}
+
+.select-input {
+    padding: 5px;
+}
+
+.range-container {
+    margin: 20px 0;
+}
+
+.metrics-section {
+    margin-top: 20px;
+}
+
+.metrics-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.submit-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.train-button {
+    font-weight: bold;
+    color: white;
+    background-color: #1e468a;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.train-button:hover {
+    background-color: #153261; 
+}

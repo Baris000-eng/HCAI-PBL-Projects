@@ -1,24 +1,28 @@
-{% extends 'base.html' %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'visualize.css' %}">
+</head>
+
 {% block content %}
-<div class="box" style="padding: 20px;">
+<div class="visualization-container">
     <h2>Data Visualization</h2>
     
-    <div style="position: relative; height:40vh; width:80vw; margin: auto;">
+    <div class="chart-container">
         <canvas id="myChart"></canvas>
     </div>
 
-    <div style="margin: 20px; display: flex; gap: 20px; justify-content: center;">
+    <div class="controls-wrapper">
         <div>
-            <label><strong>X Axis:</strong></label>
-            <select id="xColumn" onchange="drawChart()">
+            <label class="axis-label">X Axis:</label>
+            <select id="xColumn" class="axis-select" onchange="drawChart()">
                 {% for col in columns %}
                     <option value="{{ forloop.counter0 }}">{{ col }}</option>
                 {% endfor %}
             </select>
         </div>
         <div>
-            <label><strong>Y Axis:</strong></label>
-            <select id="yColumn" onchange="drawChart()">
+            <label class="axis-label">Y Axis:</label>
+            <select id="yColumn" class="axis-select" onchange="drawChart()">
                 {% for col in columns %}
                     <option value="{{ forloop.counter0 }}" {% if forloop.counter == 2 %}selected{% endif %}>{{ col }}</option>
                 {% endfor %}
@@ -26,36 +30,16 @@
         </div>
     </div>
 
-    <hr>
-    <div style="text-align: center; font-weight: bold">
+    <hr class="divider">
+    
+    <div class="footer-container">
         <form action="{% url 'project1:train' %}" method="GET">
             <button type="submit" class="button">Proceed to Machine Learning Model Training</button>
         </form>
     </div>
 </div>
 
+<script id="data-json" type="application/json">{{ full_data|safe }}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    let myChart; 
-    const rawData = JSON.parse('{{ full_data|safe }}');
-
-    function drawChart() {
-        const xCol = document.getElementById('xColumn').value;
-        const yCol = document.getElementById('yColumn').value;
-        const xLabel = document.getElementById('xColumn').options[document.getElementById('xColumn').selectedIndex].text;
-        const yLabel = document.getElementById('yColumn').options[document.getElementById('yColumn').selectedIndex].text;
-
-        const formattedData = rawData.map(d => ({ x: d[xCol], y: d[yCol] }));
-
-        if (myChart) myChart.destroy(); 
-
-        myChart = new Chart(document.getElementById('myChart'), {
-            type: 'scatter',
-            data: {
-                datasets: [{ label: `${xLabel} vs ${yLabel}`, data: formattedData, backgroundColor: '#275CB2' }]
-            }
-        });
-    }
-    document.addEventListener('DOMContentLoaded', drawChart);
-</script>
+<script src="{% static 'visualize.js' %}"></script>
 {% endblock %}

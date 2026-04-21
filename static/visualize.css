@@ -1,0 +1,51 @@
+.visualization-container {
+    padding: 20px;
+    margin: auto;
+    background-color: lightblue;
+    height: 100vh;
+}
+
+.chart-container {
+    position: relative;
+    height: 40vh;
+    width: 80vw;
+    margin: auto;
+}
+
+.controls-wrapper {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.axis-label {
+    font-weight: bold;
+}
+
+.axis-select {
+    padding: 5px;
+}
+
+.divider {
+    margin: 20px 0;
+}
+
+.footer-container {
+    text-align: center;
+    font-weight: bold;
+}
+
+.button {
+    background-color: #1e468a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #153261; 
+}
