@@ -16,8 +16,21 @@
                 <option value="dtc">Decision Tree Classifier</option>
                 <option value="svm">Support Vector Machine Classifier</option>
                 <option value="knn">K-Nearest Neighbors Classifier</option>
+                <option value="sgdc">Stochastic Gradient Descent Classifier</option>
                 <option value="log_reg">Logistic Regression</option>
             </select>
+        </div>
+
+        <div class="form-group" id="iter_container">
+            <label for="iter_input">Number of iterations (epochs):</label>
+                <input type="number" 
+                        id="iter_input" 
+                        name="iterations"
+                        min="1" 
+                        max="1000" 
+                        value="100">
+                <br>
+            <small>Maximum number of iterations that can be entered is 1000. Suggested Range: 100 - 1000 (Only for SVM, LogReg, SGDC)</small>
         </div>
 
         <div class="form-group">

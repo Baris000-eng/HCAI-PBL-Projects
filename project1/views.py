@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 import json 
 import io 
 
@@ -77,18 +77,22 @@ def train(request):
 
             weight_selection = request.POST.get('class_weight')
             final_weight = None if weight_selection == 'none' else 'balanced'
-            
+
+            number_of_epochs = int(request.POST.get('iterations', 100))
+
             if model_type.lower() == 'rfc':
                 model = RandomForestClassifier(random_state=final_seed, class_weight=final_weight)
             elif model_type.lower() == 'svm': 
-                model = SVC(random_state=final_seed, class_weight=final_weight)
+                model = SVC(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
             elif model_type.lower() == 'knn': 
                 knn_weight = 'distance' if final_weight == 'balanced' else 'uniform'
                 model = KNeighborsClassifier(weights=knn_weight)
             elif model_type.lower() == 'dtc': 
                 model = DecisionTreeClassifier(random_state=final_seed, class_weight=final_weight)
             elif model_type.lower() == 'log_reg': 
-                model = LogisticRegression(random_state=final_seed, class_weight=final_weight)
+                model = LogisticRegression(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
+            elif model_type.lower() == 'sgdc': 
+                model = SGDClassifier(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
 
             
             model.fit(X_train, y_train)

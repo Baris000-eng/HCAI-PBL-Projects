@@ -20,3 +20,31 @@ document.querySelector('form').addEventListener('submit', function(e) {
         alert("Please select at least one evaluation metric before training the model!");
     }
 });
+
+function toggleIterationInput() {
+    const modelSelect = document.querySelector('select[name="model_type"]');
+    const iterInput = document.getElementById('iter_input');
+    const iterContainer = document.getElementById('iter_container');
+    
+    if (!modelSelect || !iterInput || !iterContainer) return;
+
+    const selectedModel = modelSelect.value;
+    const needsIteration = ['svm', 'log_reg', 'sgdc'];
+    
+    if (needsIteration.includes(selectedModel)) {
+        iterInput.disabled = false;
+        iterContainer.style.opacity = "1";
+        iterInput.style.cursor = "text";
+    } else {
+        iterInput.disabled = true;
+        iterContainer.style.opacity = "0.5";
+        iterInput.style.cursor = "not-allowed";
+    }
+}
+
+window.onload = () => {
+    toggleIterationInput();
+
+    const modelSelect = document.querySelector('select[name="model_type"]');
+    modelSelect.addEventListener('change', toggleIterationInput);
+};
