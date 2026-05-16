@@ -1,21 +1,24 @@
+import json
 import numpy as np
 import pandas as pd
-import json 
+import graphviz
 from django.shortcuts import render
 from palmerpenguins import load_penguins
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-import graphviz
 
 def index(request):
-    # Data Loading and Preprocessing 
+    # --- Data Loading and Preprocessing ---
     df = load_penguins().dropna(subset=['species', 'bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g'])
     feature_names = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']
     
     X = df[feature_names].copy()
     y = df['species'].copy()
+    
+    master_classes = sorted(list(y.unique())) 
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
     # Calculate Median Absolute Deviation for distance weighting in counterfactual search 
@@ -25,15 +28,15 @@ def index(request):
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # --- Obtain User-Captured Inputs ---
-    lambda_param = float(request.GET.get('lambda_value', 0))
+    # Obtain User-Selected Inputs 
+    lambda_param = float(request.GET.get('lambda_value', 0.0))
     model_type = request.GET.get('model_type', 'tree')
     selected_feature = request.GET.get('feature', 'bill_length_mm')
     
     sample_idx = int(request.GET.get('sample_idx', 0))
     target_label = request.GET.get('target_label', 'Gentoo')
 
-    # --- Model Fitting & Hyperparameter Search ---
+    # --- Model Fitting & Structural Hyperparameter Search ---
     
     # Decision Tree Optimization: Minimize (1 - Accuracy) + Lambda * Complexity
     best_dt_objective = float('inf')
@@ -71,19 +74,21 @@ def index(request):
 
     # Select operational model architecture
     active_model = best_dt if model_type == 'tree' else best_lr
-    classes = list(active_model.classes_)
+    
+    # Map layout indexes of the active model back to master classes
+    model_class_to_idx = {cls: idx for idx, cls in enumerate(active_model.classes_)}
     
     # Extract structural metrics for dashboard display
     active_accuracy = active_model.score(X_test, y_test) if model_type == 'tree' else active_model.score(X_test_scaled, y_test)
     active_leaves_or_sparsity = active_model.get_n_leaves() if model_type == 'tree' else int(np.sum(np.abs(active_model.coef_) > 1e-4))
 
-    # --- Dynamic Tree Generation ---
+    # Dynamic Tree Generation
     tree_graph_html = ""
     if model_type == 'tree' and best_dt is not None:
         try:
             dot_data = export_graphviz(
                 best_dt, out_file=None, feature_names=feature_names,
-                class_names=classes, filled=True, rounded=True, special_characters=True
+                class_names=master_classes, filled=True, rounded=True, special_characters=True
             )
             graph = graphviz.Source(dot_data)
             tree_graph_html = graph.pipe(format='svg').decode('utf-8')
@@ -97,7 +102,7 @@ def index(request):
     x_base = X_train.iloc[sample_idx]
     
     # Local random perturbation sampling
-    N = 4000
+    N = 3500
     stds = X_train.std().values
     random_noise = np.random.normal(0, 3.0, size=(N, len(feature_names))) * stds
     synthetic_samples = pd.DataFrame(x_base.values + random_noise, columns=feature_names)
@@ -118,31 +123,39 @@ def index(request):
         best_cf = valid_samples.sort_values(by='distance').head(3)
         counterfactuals_list = best_cf[feature_names].round(2).values.tolist()
 
-    # --- MANUAL COMPUTATION OF PDP ---
+    # Manual Computation of PDP 
     feature_values = X_train[selected_feature].values
     grid = np.linspace(feature_values.min(), feature_values.max(), 20)
-    pdp_curves = {cls: [] for cls in classes}
+    
+    # Initialize dictionary explicitly for all three master classes
+    pdp_curves = {cls: [] for cls in master_classes}
     
     for val in grid:
         X_temp = X_train.copy()
         X_temp[selected_feature] = val
         probs = active_model.predict_proba(scaler.transform(X_temp) if model_type == 'lr' else X_temp)
         mean_probs = np.mean(probs, axis=0)
-        for idx, cls in enumerate(classes):
-            pdp_curves[cls].append(float(mean_probs[idx]))
+        
+        for cls in master_classes:
+            if cls in model_class_to_idx:
+                actual_idx = model_class_to_idx[cls]
+                pdp_curves[cls].append(float(mean_probs[actual_idx]))
+            else:
+                pdp_curves[cls].append(0.0) # Fallback baseline if model drops a class entirely
 
-    # --- FIXED MANUAL COMPUTATION OF ALE ---
-    # --- FIXED MANUAL COMPUTATION OF ALE ---
+    #  Manual Computation of ALE 
     raw_feature_values = X_train[selected_feature].values
     
-    # 40 bins provides higher precision to catch local decision boundaries
+    # Intervals provides higher precision to catch local decision bounds
     bins = np.percentile(raw_feature_values, np.linspace(0, 100, 41)) 
     bins = np.unique(bins) 
     
     bin_centers = (bins[:-1] + bins[1:]) / 2
-    ale_accumulated = {cls: np.zeros(len(bin_centers)) for cls in classes}
     
-    for b_idx in range(len(bins)-1):
+    # Initialize step array explicitly for all three master classes
+    ale_accumulated = {cls: np.zeros(len(bin_centers)) for cls in master_classes}
+    
+    for b_idx in range(0, len(bins)-1):
         left, right = bins[b_idx], bins[b_idx+1]
         indices = np.where((raw_feature_values >= left) & (raw_feature_values <= right))[0]
         
@@ -163,20 +176,25 @@ def index(request):
             p_right = active_model.predict_proba(X_right)
         
         mean_diff = np.mean(p_right - p_left, axis=0)
-        for idx, cls in enumerate(classes):
-            ale_accumulated[cls][b_idx] = mean_diff[idx]
+        
+        for cls in master_classes:
+            if cls in model_class_to_idx:
+                actual_idx = model_class_to_idx[cls]
+                ale_accumulated[cls][b_idx] = mean_diff[actual_idx]
+            else:
+                ale_accumulated[cls][b_idx] = 0.0
 
     display_bin_centers = [round(x, 2) for x in bin_centers]
-    ale_curves = {cls: [] for cls in classes}
+    ale_curves = {cls: [] for cls in master_classes}
     
-    for cls in classes:
+    for cls in master_classes:
         cumulative = np.cumsum(ale_accumulated[cls])
         # Accurate mean-centering adjustment over the calculated step progression
         if len(cumulative) > 0:
             cumulative = cumulative - np.mean(cumulative)
         ale_curves[cls] = [float(x) for x in cumulative]
 
-    # --- RENDER CONTEXT PAYLOAD ---
+    # --- Render Context Payload ---
     context = {
         'lambda_value': lambda_param,
         'model_type': model_type,
@@ -190,9 +208,9 @@ def index(request):
         'bin_centers': json.dumps(display_bin_centers),
         'ale_curves': json.dumps(ale_curves),
         'base_sample': x_base.round(2).to_dict(),
-        'counterfactuals_list': counterfactuals_list, # Synchronized naming key
+        'counterfactuals_list': counterfactuals_list,
         'target_label': target_label,
-        'classes': classes
+        'classes': master_classes # Ensure frontend selects dropdowns use master list
     }
     return render(request, 'project2/index.html', context)
 

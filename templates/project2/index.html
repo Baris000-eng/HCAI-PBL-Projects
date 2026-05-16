@@ -18,7 +18,7 @@
             <form method="GET" action="" id="controls-form" class="inline-flex-form">
                 <div>
                     <label for="lambda">Lambda Penalty (&lambda;):</label>
-                    <input type="range" id="lambda" name="lambda" min="0.00" max="0.50" step="0.005" value="{{ lambda_value }}" onchange="this.form.submit()">
+                    <input type="range" id="lambda_value" name="lambda_value" min="0.00" max="0.90" step="0.005" value="{{ lambda_value }}" onchange=this.form.submit()>
                     <span class="badge">{{ lambda_value }}</span>
                 </div>
                 
@@ -78,7 +78,7 @@
             <p class="subtitle">Search for local counterfactual alternatives using a MAD-weighted L<sup>1</sup>-distance constraint matrix.</p>
             
             <form method="GET" action="" class="inline-flex-form local-cf-form">
-                <input type="hidden" name="lambda" value="{{ lambda_value }}">
+                <input type="hidden" name="lambda_value" value="{{ lambda_value }}">
                 <input type="hidden" name="model_type" value="{{ model_type }}">
                 <input type="hidden" name="feature" value="{{ selected_feature }}">
 
