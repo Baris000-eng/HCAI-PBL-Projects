@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2: Explainability Dashboard</title>
+    <link rel="stylesheet" href="{% static 'styles_project2.css' %}">
+</head>
+<body>
+
+    <main class="dashboard-container">
+        <h1>Project 2: Explainability Dashboard</h1>
+        <p class="subtitle-main">Human-Centric Artificial Intelligence — Palmer Penguins Dataset</p>
+
+        <section class="card control-card">
+            <h2>Global Settings & Active Model Selector</h2>
+            <form method="GET" action="" id="controls-form" class="inline-flex-form">
+                <div>
+                    <label for="lambda">Lambda Penalty (&lambda;):</label>
+                    <input type="range" id="lambda" name="lambda" min="0.00" max="0.10" step="0.005" value="{{ lambda_value }}" onchange="this.form.submit()">
+                    <span class="badge">{{ lambda_value }}</span>
+                </div>
+                
+                <div>
+                    <label for="model_type">Model Class Architecture:</label>
+                    <select name="model_type" onchange="this.form.submit()">
+                        <option value="tree" {% if model_type == 'tree' %}selected{% endif %}>Decision Tree Classifier</option>
+                        <option value="lr" {% if model_type == 'lr' %}selected{% endif %}>Logistic Regression</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="feature">Global Feature Curve Selection (PDP/ALE):</label>
+                    <select name="feature" onchange="this.form.submit()">
+                        {% for f in feature_names %}
+                            <option value="{{ f }}" {% if f == selected_feature %}selected{% endif %}>{{ f }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <input type="hidden" name="sample_idx" value="{{ request.GET.sample_idx|default:'0' }}">
+                <input type="hidden" name="target_label" value="{{ target_label }}">
+            </form>
+        </section>
+
+        <section class="card metrics-card">
+            <h2>Model Optimization Overview</h2>
+            <p class="subtitle">Displays metrics for the model that minimizes the objective: <code>acc<sub>test</sub> + &lambda;&Omega;(g)</code></p>
+            
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <span class="metric-label">Model Test Dataset Accuracy (acc<sub>test</sub>):</span>
+                    <span class="metric-value">{{ accuracy }}</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Model Structural Complexity (&Omega;(g)):</span>
+                    <span class="metric-value">
+                        {{ complexity_metric }} 
+                        {% if model_type == 'tree' %}Leaf Nodes{% else %}Non-Zero Weights (Sparsity){% endif %}
+                    </span>
+                </div>
+            </div>
+
+            {% if model_type == 'tree' and tree_graph %}
+            <div class="tree-rules-viewport" style="margin-top: 25px; border-top: 2px dashed #e2e8f0; padding-top: 20px; text-align: center;">
+                <h3 style="margin-bottom: 15px; color: #2d3748; text-align: left;">Resulting Optimized Decision Tree Structure</h3>
+                
+                <div class="interactive-tree-scroll" style="overflow-x: auto; background: #fff; padding: 20px; border: 1px solid #cbd5e0; border-radius: 8px;">
+                    {{ tree_graph|safe }}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="card counterfactual-card">
+            <h2>Local Counterfactual Interpretability Engine</h2>
+            <p class="subtitle">Search for local counterfactual alternatives using a MAD-weighted L<sup>1</sup>-distance constraint matrix.</p>
+            
+            <form method="GET" action="" class="inline-flex-form local-cf-form">
+                <input type="hidden" name="lambda" value="{{ lambda_value }}">
+                <input type="hidden" name="model_type" value="{{ model_type }}">
+                <input type="hidden" name="feature" value="{{ selected_feature }}">
+
+                <div>
+                    <label for="sample_idx">Select Sample Point Row Index (x):</label>
+                    <input type="number" name="sample_idx" min="0" max="200" value="{{ request.GET.sample_idx|default:'0' }}">
+                </div>
+
+                <div>
+                    <label for="target_label">Desired Target Counterfactual Outcome Class:</label>
+                    <select name="target_label">
+                        {% for cls in classes %}
+                            <option value="{{ cls }}" {% if cls == target_label %}selected{% endif %}>{{ cls }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Generate Explanations</button>
+            </form>
+
+            <div class="cf-results-container">
+                <div class="cf-box base-point">
+                    <h3>Base Sample Profile Array (x)</h3>
+                    <ul>
+                        {% for feat, val in base_sample.items %}
+                            <li>
+                                <strong>{{ feat }}:</strong> {{ val }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="cf-box alternatives">
+                    <h3>Closest Counterfactual Alterations Found</h3>
+                    {% if counterfactuals %}
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        {% for feat in feature_names %}
+                                            <th>{{ feat }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cf_row in counterfactuals %}
+                                        <tr>
+                                            {% for value in cf_row %}
+                                                <td>{{ value }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="warning-text"> No local counterfactual variations discovered that alter predictions to "{{ target_label }}".</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="card plots-card">
+            <h2>Custom Partial Dependence (PDP) & Accumulated Local Effects (ALE) Plots</h2>
+            <p class="subtitle">Scratch computed marginal feature impacts showing trend variations across all three species curves.</p>
+
+            <div class="chart-flex-container">
+                <div class="chart-box">
+                    <h3>Partial Dependence Plot (PDP)</h3>
+                    <canvas id="pdpChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Accumulated Local Effects (ALE) Plot</h3>
+                    <canvas id="aleChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script id="pdp-labels" type="application/json">{{ grid_labels|safe }}</script>
+    <script id="pdp-data" type="application/json">{{ pdp_curves|safe }}</script>
+    <script id="ale-labels" type="application/json">{{ bin_centers|safe }}</script>
+    <script id="ale-data" type="application/json">{{ ale_curves|safe }}</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'explainability.js' %}"></script>
+</body>
+</html>
