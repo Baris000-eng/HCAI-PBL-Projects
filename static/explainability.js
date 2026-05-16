@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                     scales: {
                         x: { title: { display: true, text: 'Local Quantile Bin Centers' } },
-                        y: { title: { display: true, text: 'Centered Local Effect Δ' } }
+                        y: { title: { display: true, text: 'Centered Local Effect' } }
                     }
                 }
             });
@@ -90,14 +90,3 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Chart Lifecycle Exception caught during processing:", error);
     }
 });
-
-function updateFormHiddenInputs() {
-    const form = document.getElementById('controls-form');
-    if (!form) return;
-    
-    const modelSel = document.getElementById('model_selector');
-    const featSel = document.getElementById('feature_selector');
-    
-    if (modelSel) form.querySelector('input[name="model_type"]').value = modelSel.value;
-    if (featSel) form.querySelector('input[name="feature"]').value = featSel.value;
-}
