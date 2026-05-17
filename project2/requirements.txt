@@ -1,2 +1,7 @@
 palmerpenguins
 graphviz 
+pandas 
+numexpr 
+bottleneck 
+graphviz 
+django 
