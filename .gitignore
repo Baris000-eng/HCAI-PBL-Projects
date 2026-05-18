@@ -4,6 +4,11 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Dataset files 
+data/
+dataset/
+input_data/
+
 # Environments
 .env
 .venv
@@ -15,7 +20,6 @@ env.bak/
 venv.bak/
 
 # Python configuration files 
-profile_default/
 ipython_config.py
 .pdm.toml
 .pdm-python
