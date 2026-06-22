@@ -3,12 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HCAI Project 3</title>
-    <link rel="stylesheet" href="{% static 'styles_project3.css' %}">
+    <title>Active Learning & Learning-to-Defer Dashboard</title>
+    <link rel="stylesheet" href="/static/styles_project3.css">
 </head>
 <body>
-     <h1>Project 3:</h1>
+    <header>
+        <h1>Active Learning for Learning-to-Defer System</h1>
+        <p class="subtitle">Human-Centric Artificial Intelligence Lab Workspace</p>
+    </header>
 
-    <script src="{% static 'project3.js' %}"></script>
+    <main class="container">
+        <section class="card" id="baselines-section">
+            <h2>Tasks 1 & 2: System Baselines</h2>
+            <div class="grid-2">
+                <div class="metric-box box-blue">
+                    <h3>Classifier Baseline (Task 1)</h3>
+                    <p id="txt-classifier-acc" class="metric-value">Loading...</p>
+                </div>
+                <div class="metric-box box-green">
+                    <h3>Simulated Expert Accuracy (Task 2)</h3>
+                    <p id="txt-expert-acc" class="metric-value">Loading...</p>
+                    <small>*Specialized expertise in Class 1 (Baseball)</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="deferral-section">
+            <h2>Task 3: Learning to Defer Strategy Evaluation</h2>
+            <p>Adjust system confidence threshold. Instances below this confidence value are routed to the expert.</p>
+            
+            <div class="control-group">
+                <label for="threshold-slider">Confidence Threshold ($ \tau $): <span id="threshold-val">0.75</span></label>
+                <input type="range" id="threshold-slider" min="0.0" max="1.0" step="0.05" value="0.75">
+            </div>
+
+            <div class="grid-3 mt-2">
+                <div class="metric-box">
+                    <h4>Combined Hybrid Accuracy</h4>
+                    <p id="defer-system-acc" class="metric-value highlight">--</p>
+                </div>
+                <div class="metric-box">
+                    <h4>Deferral Rate</h4>
+                    <p id="defer-rate" class="metric-value">--</p>
+                </div>
+                <div class="metric-box">
+                    <h4>Total Handed over to Expert</h4>
+                    <p id="deferred-count" class="metric-value">--</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="active-learning-section">
+            <h2>Tasks 4 & 5: Active Learning & Interactive Human Oracle Loop</h2>
+            <p>The system uses <strong>Least Confidence Sampling</strong> to detect items it doesn't understand. Query the simulated expert or choose the correct label yourself as the Human Expert.</p>
+            
+            <div class="grid-2 mt-2">
+                <div class="al-panel">
+                    <h3>Current Uncertain Sample Pool Item</h3>
+                    <div id="sample-text-box" class="sample-text">Loading incoming pool data items...</div>
+                    <div class="meta-info">
+                        <p><strong>Simulated Expert's Decision Recommendation:</strong> <span id="expert-recom" class="badge">--</span></p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="btn-use-expert" class="btn btn-primary">Query Simulated Expert</button>
+                        <hr data-content="OR CHOOSE AS HUMAN EXPERT (Task 5)" class="hr-text">
+                        <div id="human-options" class="grid-2">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="al-panel tracker-panel">
+                    <h3>Active Learning Model Tracking</h3>
+                    <div class="metric-box box-purple">
+                        <h4>Active Learner Model Accuracy</h4>
+                        <p id="al-model-acc" class="metric-value">Evaluating...</p>
+                    </div>
+                    <div class="metric-box">
+                        <h4>Total Active Queries Collected</h4>
+                        <p id="al-query-count" class="metric-value">0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/project3.js"></script>
 </body>
 </html>
