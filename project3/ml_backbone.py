@@ -118,7 +118,9 @@ class DeferralSystemManager:
 
         # Retrain dynamic tracker model instance
         self.al_model = LogisticRegression(C=1.0)
-        self.al_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
+        X_train = self.X_train[self.AL_labeled_indices]
+        y_train = self.y_train[self.AL_labeled_indices]
+        self.al_model.fit(X_train, y_train)
 
         al_preds = self.al_model.predict(self.X_test)
         current_al_acc = float(accuracy_score(self.y_test, al_preds))
