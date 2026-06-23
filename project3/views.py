@@ -2,11 +2,11 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ml_backbone import ml_manager
+from .ml_backbone import ml_manager
 
 def index(request):
     """Renders dashboard user interface workspace template context view."""
-    return render(request, 'index.html')
+    return render(request, 'project3/index.html')
 
 def get_metrics(request):
     """Returns baseline stats for Task 1 and Task 2."""

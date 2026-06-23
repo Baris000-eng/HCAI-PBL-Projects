@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Load tasks 1 & 2 metrics
 async function loadBaseMetrics() {
     try {
-        const res = await fetch("/api/metrics");
+        const res = await fetch("/project3/api/metrics/");
         const data = await res.json();
         
         document.getElementById("txt-classifier-acc").innerText = (data.baseline_accuracy * 100).toFixed(2) + "%";
@@ -35,7 +35,7 @@ async function loadBaseMetrics() {
 // Task 3: Learning to Defer Loop caller
 async function evaluateDeferralSystem(threshold) {
     try {
-        const res = await fetch("/api/learning_to_defer", {
+        const res = await fetch("/project3/api/learning_to_defer/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ threshold: parseFloat(threshold) })
@@ -58,7 +58,7 @@ function initLearningToDefer() {
 // Tasks 4 & 5: Load Active Learning Sample
 async function loadNextALSample() {
     try {
-        const res = await fetch("/api/active_learning/next");
+        const res = await fetch("/project3/api/active_learning/next/");
         const data = await res.json();
         
         currentSampleIndex = data.sample_index;
@@ -90,7 +90,7 @@ async function submitQuery(labelSelected) {
     if (currentSampleIndex === null) return;
     
     try {
-        const res = await fetch("/api/active_learning/query", {
+        const res = await fetch("/project3/api/active_learning/query/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

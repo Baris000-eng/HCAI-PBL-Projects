@@ -9,19 +9,18 @@
 <body>
     <header>
         <h1>Active Learning for Learning-to-Defer System</h1>
-        <p class="subtitle">Human-Centric Artificial Intelligence Lab Workspace</p>
     </header>
 
     <main class="container">
         <section class="card" id="baselines-section">
-            <h2>Tasks 1 & 2: System Baselines</h2>
+            <h2>System Baselines</h2>
             <div class="grid-2">
                 <div class="metric-box box-blue">
-                    <h3>Classifier Baseline (Task 1)</h3>
+                    <h3>Classifier Baseline</h3>
                     <p id="txt-classifier-acc" class="metric-value">Loading...</p>
                 </div>
                 <div class="metric-box box-green">
-                    <h3>Simulated Expert Accuracy (Task 2)</h3>
+                    <h3>Simulated Expert Accuracy</h3>
                     <p id="txt-expert-acc" class="metric-value">Loading...</p>
                     <small>*Specialized expertise in Class 1 (Baseball)</small>
                 </div>
@@ -29,11 +28,11 @@
         </section>
 
         <section class="card" id="deferral-section">
-            <h2>Task 3: Learning to Defer Strategy Evaluation</h2>
+            <h2>Learning to Defer Strategy Evaluation</h2>
             <p>Adjust system confidence threshold. Instances below this confidence value are routed to the expert.</p>
             
             <div class="control-group">
-                <label for="threshold-slider">Confidence Threshold ($ \tau $): <span id="threshold-val">0.75</span></label>
+                <label for="threshold-slider">Confidence Threshold: <span id="threshold-val">0.75</span></label>
                 <input type="range" id="threshold-slider" min="0.0" max="1.0" step="0.05" value="0.75">
             </div>
 
@@ -54,7 +53,7 @@
         </section>
 
         <section class="card" id="active-learning-section">
-            <h2>Tasks 4 & 5: Active Learning & Interactive Human Oracle Loop</h2>
+            <h2>Active Learning & Interactive Human Oracle Loop</h2>
             <p>The system uses <strong>Least Confidence Sampling</strong> to detect items it doesn't understand. Query the simulated expert or choose the correct label yourself as the Human Expert.</p>
             
             <div class="grid-2 mt-2">
@@ -62,12 +61,12 @@
                     <h3>Current Uncertain Sample Pool Item</h3>
                     <div id="sample-text-box" class="sample-text">Loading incoming pool data items...</div>
                     <div class="meta-info">
-                        <p><strong>Simulated Expert's Decision Recommendation:</strong> <span id="expert-recom" class="badge">--</span></p>
+                        <p><strong>Simulated Expert's Decision Recommendation:</strong><br><br><span id="expert-recom" class="badge">--</span></p>
                     </div>
                     
                     <div class="action-buttons">
                         <button id="btn-use-expert" class="btn btn-primary">Query Simulated Expert</button>
-                        <hr data-content="OR CHOOSE AS HUMAN EXPERT (Task 5)" class="hr-text">
+                        <hr data-content="OR CHOOSE AS HUMAN EXPERT" class="hr-text">
                         <div id="human-options" class="grid-2">
                             </div>
                     </div>
