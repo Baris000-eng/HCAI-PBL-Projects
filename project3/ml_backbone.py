@@ -8,7 +8,6 @@ CATEGORIES = ['comp.graphics', 'rec.sport.baseball', 'sci.space', 'talk.politics
 
 class DeferralSystemManager:
     def __init__(self):
-        print("Initializing Machine Learning Datasets & Baselines...")
         # Simulating 4-class AG News setup using 20Newsgroups slice
         self.newsgroups_train = fetch_20newsgroups(subset='train', categories=CATEGORIES, remove=('headers', 'footers', 'quotes'))
         self.newsgroups_test = fetch_20newsgroups(subset='test', categories=CATEGORIES, remove=('headers', 'footers', 'quotes'))
@@ -62,7 +61,7 @@ class DeferralSystemManager:
         return np.array(expert_preds)
 
     def process_learning_to_defer(self, threshold):
-        """Task 3: Dispatches low-confidence choices to human or expert pipelines."""
+        """Dispatches low-confidence choices to human or expert pipelines."""
         probs = self.baseline_model.predict_proba(self.X_test)
         max_probs = np.max(probs, axis=1)
         classifier_preds = np.argmax(probs, axis=1)
@@ -86,7 +85,7 @@ class DeferralSystemManager:
         }
 
     def get_next_uncertain_sample(self):
-        """Task 4: Selects data instances with lowest prediction confidence scores."""
+        """Selects data instances with lowest prediction confidence scores."""
         if not self.AL_pool_indices:
             return None
 
@@ -107,7 +106,7 @@ class DeferralSystemManager:
         }
 
     def process_query_update(self, idx, chosen_label):
-        """Tasks 4 & 5: Absorbs feedback loop entries and updates the active learner."""
+        """Absorbs feedback loop entries and updates the active learner."""
         if idx in self.AL_pool_indices:
             self.AL_pool_indices.remove(idx)
         if idx not in self.AL_labeled_indices:

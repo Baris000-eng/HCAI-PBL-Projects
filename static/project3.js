@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Load tasks 1 & 2 metrics
+// Load base metrics
 async function loadBaseMetrics() {
     try {
         const res = await fetch("/project3/api/metrics/");
@@ -55,7 +55,7 @@ function initLearningToDefer() {
     evaluateDeferralSystem(currentVal);
 }
 
-// Tasks 4 & 5: Load Active Learning Sample
+// Load Active Learning Sample
 async function loadNextALSample() {
     try {
         const res = await fetch("/project3/api/active_learning/next/");
@@ -68,7 +68,7 @@ async function loadNextALSample() {
         document.getElementById("sample-text-box").innerText = data.text;
         document.getElementById("expert-recom").innerText = categoryLabels[data.simulated_expert_label];
 
-        // Build Task 5 Interactive buttons for Human Override Expert choices
+        // Build Interactive buttons for Human Override Expert choices
         const humanOptionsContainer = document.getElementById("human-options");
         humanOptionsContainer.innerHTML = "";
         
@@ -87,7 +87,9 @@ async function loadNextALSample() {
 
 // Submit choice to loop cycle updates
 async function submitQuery(labelSelected) {
-    if (currentSampleIndex === null) return;
+    if (currentSampleIndex === null) {
+        return;
+    }
     
     try {
         const res = await fetch("/project3/api/active_learning/query/", {
@@ -98,6 +100,11 @@ async function submitQuery(labelSelected) {
                 label: parseInt(labelSelected)
             })
         });
+
+        if(!res.ok) {
+            throw new Error("Labeling task is completed. No more samples are available in the active learning pool.");
+        }
+
         const data = await res.json();
         
         // Update tracker UI metrics outputs
@@ -110,3 +117,4 @@ async function submitQuery(labelSelected) {
         console.error("Error setting Active Learning label submission:", err);
     }
 }
+

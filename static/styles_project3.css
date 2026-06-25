@@ -55,12 +55,30 @@ header h1 {
     text-align: center;
     background-color: #fafafa;
 }
-.box-blue { background-color: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
-.box-green { background-color: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
-.box-purple { background-color: #faf5ff; border-color: #e9d5ff; color: #5b21b6; }
+.box-blue { 
+    background-color: #eff6ff; 
+    border-color: #bfdbfe; 
+    color: #1e40af; 
+}
+.box-green {
+    background-color: #ecfdf5; 
+    border-color: #a7f3d0; 
+    color: #065f46; 
+}
+.box-purple { 
+    background-color: #faf5ff; 
+    border-color: #e9d5ff; 
+    color: #5b21b6; 
+}
 
-.metric-value { font-size: 2rem; font-weight: bold; margin: 0.5rem 0 0 0; }
-.metric-value.highlight { color: var(--primary-color); }
+.metric-value { 
+    font-size: 2rem; 
+    font-weight: bold; 
+    margin: 0.5rem 0 0 0; 
+}
+.metric-value.highlight { 
+    color: var(--primary-color); 
+}
 
 .control-group {
     margin: 1.5rem 0;
@@ -90,16 +108,41 @@ input[type="range"] { width: 100%; max-width: 400px; cursor: pointer; }
     margin-bottom: 1rem;
 }
 
-.badge { background-color: var(--warning-color); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; }
+.badge { 
+    background-color: var(--warning-color); 
+    color: white; padding: 0.2rem 0.6rem; 
+    border-radius: 4px; 
+    font-weight: bold; 
+}
 
 .btn {
-    display: block; width: 100%; padding: 0.75rem; border: none; border-radius: 6px;
-    font-size: 1rem; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s;
+    padding: 0.75rem; 
+    border: none; 
+    border-radius: 6px;
+    font-size: 1rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    text-align: center; 
+    text-decoration: none;
 }
-.btn-primary { background-color: var(--primary-color); color: white; }
-.btn-primary:hover { background-color: #4338ca; }
-.btn-secondary { background-color: #e5e7eb; color: #374151; font-size: 0.85rem; padding: 0.5rem; }
-.btn-secondary:hover { background-color: #d1d5db; }
+.btn-primary { 
+    background-color: var(--primary-color); 
+    color: white; 
+    text-decoration: none;
+}
+.btn-primary:hover { 
+    background-color: #4338ca; 
+}
+.btn-secondary { 
+    background-color: #e5e7eb; 
+    color: #374151; 
+    font-size: 0.85rem; 
+    padding: 0.5rem; 
+    text-decoration: none;
+}
+.btn-secondary:hover {
+    background-color: #d1d5db; 
+}
 
 .hr-text {
     line-height: 1em; position: relative; outline: 0; border: 0; color: black;
@@ -112,4 +155,24 @@ input[type="range"] { width: 100%; max-width: 400px; cursor: pointer; }
 .hr-text:after {
     content: attr(data-content); position: relative; display: inline-block; color: black;
     padding: 0 .5em; background-color: #fff;
+}
+
+.download-report-link {
+    text-decoration: none;
+}
+
+.download-report-button {
+    margin-top: 10px;
+    background-color: lightblue;
+    color: black;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    width: 200px;
+    height: 70px;
+}
+
+.download-report-button:hover {
+    background-color: skyblue;
 }

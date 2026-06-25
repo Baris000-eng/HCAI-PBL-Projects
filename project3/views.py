@@ -20,7 +20,7 @@ def get_metrics(request):
 
 @csrf_exempt
 def learning_to_defer(request):
-    """Task 3: Evaluates combined operational system accuracies based on variable confidence thresholds."""
+    """Evaluates combined operational system accuracies based on variable confidence thresholds."""
     if request.method == 'POST':
         try:
             data = json.loads(request.body) if request.body else {}
@@ -33,7 +33,7 @@ def learning_to_defer(request):
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def al_next_sample(request):
-    """Task 4: Selects next active learning candidate matching uncertainty strategies."""
+    """Selects next active learning candidate matching uncertainty strategies."""
     if request.method == 'GET':
         sample_payload = ml_manager.get_next_uncertain_sample()
         if not sample_payload:
@@ -43,7 +43,7 @@ def al_next_sample(request):
 
 @csrf_exempt
 def al_query(request):
-    """Tasks 4 & 5: Integrates human annotation inputs to update loop parameters."""
+    """Integrates human annotation inputs to update loop parameters."""
     if request.method == 'POST':
         try:
             data = json.loads(request.body) if request.body else {}
