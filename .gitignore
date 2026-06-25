@@ -34,3 +34,6 @@ build/
 develop-eggs/
 dist/
 downloads/
+
+# Desktop files 
+.DS_Store
