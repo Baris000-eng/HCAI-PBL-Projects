@@ -37,3 +37,7 @@ downloads/
 
 # Desktop files 
 .DS_Store
+
+
+# Swap files 
+*.swp
