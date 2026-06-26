@@ -1,38 +1,38 @@
 import numpy as np
-from sklearn.datasets import fetch_20newsgroups
+from datasets import load_dataset 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-CATEGORIES = ['comp.graphics', 'rec.sport.baseball', 'sci.space', 'talk.politics.mideast']
 
 class DeferralSystemManager:
     def __init__(self):
-        # Simulating 4-class AG News setup using 20Newsgroups slice
-        self.newsgroups_train = fetch_20newsgroups(subset='train', categories=CATEGORIES, remove=('headers', 'footers', 'quotes'))
-        self.newsgroups_test = fetch_20newsgroups(subset='test', categories=CATEGORIES, remove=('headers', 'footers', 'quotes'))
+        # Import the ag_news data
+        dataset = load_dataset("fancyzhx/ag_news")
+        self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
 
-        self.X_train_raw = self.newsgroups_train.data
-        self.y_train = self.newsgroups_train.target
-        self.X_test_raw = self.newsgroups_test.data
-        self.y_test = self.newsgroups_test.target
+        # Split the imported data into train and test parts 
+        self.X_train_raw = dataset['train']['text']
+        self.y_train = np.array(dataset['train']['label'])
+        self.X_test_raw = dataset['test']['text']
+        self.y_test = np.array(dataset['test']['label'])
 
         # Text Feature Extraction
         self.vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
         self.X_train = self.vectorizer.fit_transform(self.X_train_raw).toarray()
         self.X_test = self.vectorizer.transform(self.X_test_raw).toarray()
 
-        # Task 1: Baseline Classifier
+        # Baseline Classifier
         self.baseline_model = LogisticRegression(C=1.0)
         self.baseline_model.fit(self.X_train, self.y_train)
         self.baseline_preds = self.baseline_model.predict(self.X_test)
         self.baseline_acc = float(accuracy_score(self.y_test, self.baseline_preds))
 
-        # Task 2: Simulated Expert
+        # Simulated Expert
         self.expert_test_preds = self.simulate_expert_predict(self.X_test_raw, self.y_test)
         self.expert_acc = float(accuracy_score(self.y_test, self.expert_test_preds))
 
-        # Task 4: Active Learning Setup
+        # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
         self.AL_queried_indices = []
         
@@ -53,7 +53,7 @@ class DeferralSystemManager:
             if label == 1:  # Niche domain specialization
                 expert_preds.append(label)
             else:
-                if np.random.rand() < 0.65:
+                if np.random.rand() < 0.75:
                     expert_preds.append(label)
                 else:
                     remaining_classes = [c for c in range(4) if c != label]
@@ -102,7 +102,7 @@ class DeferralSystemManager:
             'text': self.X_train_raw[global_idx],
             'true_label': int(self.y_train[global_idx]),
             'simulated_expert_label': int(simulated_label),
-            'categories': CATEGORIES
+            'categories': self.categories
         }
 
     def process_query_update(self, idx, chosen_label):

@@ -6,7 +6,7 @@ let categoryLabels = [];
 document.addEventListener("DOMContentLoaded", () => {
     loadBaseMetrics();
     initLearningToDefer();
-    loadNextALSample();
+    loadNextActiveLearningSample();
 
     // Event listeners
     document.getElementById("threshold-slider").addEventListener("input", (e) => {
@@ -56,7 +56,7 @@ function initLearningToDefer() {
 }
 
 // Load Active Learning Sample
-async function loadNextALSample() {
+async function loadNextActiveLearningSample() {
     try {
         const res = await fetch("/project3/api/active_learning/next/");
         const data = await res.json();
@@ -112,7 +112,7 @@ async function submitQuery(labelSelected) {
         document.getElementById("al-query-count").innerText = data.total_labeled_count;
         
         // Advance queue to next active calculation query item
-        loadNextALSample();
+        loadNextActiveLearningSample();
     } catch (err) {
         console.error("Error setting Active Learning label submission:", err);
     }

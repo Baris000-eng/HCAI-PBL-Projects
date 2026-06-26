@@ -25,6 +25,7 @@ def learning_to_defer(request):
         try:
             data = json.loads(request.body) if request.body else {}
             threshold = float(data.get('threshold', 0.75))
+            print("SHEEEESH, the threshold is:" + str(threshold))
             
             results = ml_manager.process_learning_to_defer(threshold)
             return JsonResponse(results)
