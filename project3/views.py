@@ -9,14 +9,14 @@ def index(request):
     return render(request, 'project3/index.html')
 
 def get_metrics(request):
-    """Returns baseline stats for Task 1 and Task 2."""
+    """Returns baseline statistics."""
     if request.method == 'GET':
         return JsonResponse({
             'baseline_accuracy': ml_manager.baseline_acc,
             'expert_accuracy': ml_manager.expert_acc,
             'total_test_samples': len(ml_manager.y_test)
         })
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
+    return JsonResponse({'error': 'Method is not allowed'}, status=405)
 
 @csrf_exempt
 def learning_to_defer(request):
@@ -25,7 +25,6 @@ def learning_to_defer(request):
         try:
             data = json.loads(request.body) if request.body else {}
             threshold = float(data.get('threshold', 0.75))
-            print("SHEEEESH, the threshold is:" + str(threshold))
             
             results = ml_manager.process_learning_to_defer(threshold)
             return JsonResponse(results)

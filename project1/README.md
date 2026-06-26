@@ -15,6 +15,7 @@ source hcai_env/bin/activate
 # Go to the folder named "project1", which is at the same level with the folder named "project2" and 
 # which contains django and ML-based Python codes (e.g. views.py). 
 
+# To install all libraries needed by Project1 in the virtual environment 'hcai_env', we need to run the following command: 
 pip install -r requirements.txt 
 
 # Deactivate when you are done
@@ -35,6 +36,7 @@ python -m venv hcai_env
 # Go to the folder named "project1", which is at the same level with the folder named "project2" and 
 # which contains django and ML-based Python codes (e.g. views.py). 
 
+# To install all libraries needed by Project1 in the virtual environment 'hcai_env', we need to run the following command: 
 pip install -r requirements.txt 
 
 # Deactivate when you are done
@@ -53,6 +55,7 @@ conda activate myenv
 # Go to the folder named "project1", which is at the same level with the folder named "project2" and 
 # which contains django and ML-based Python codes (e.g. views.py). 
 
+# To install all libraries needed by Project1 in the virtual environment 'hcai_env', we need to run the following command: 
 pip install -r requirements.txt OR conda install --file requirements.txt
 
 # Deactivate when you are done

@@ -1,5 +1,6 @@
 palmerpenguins
 graphviz 
+scikit-learn
 pandas 
 numexpr 
 bottleneck 

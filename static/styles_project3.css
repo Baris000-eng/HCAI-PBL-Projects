@@ -3,7 +3,7 @@
     --card-bg: #ffffff;
     --primary-color: #4f46e5;
     --success-color: #10b981;
-    --warning-color: #f59e0b;
+    --info-color: yellow;
     --text-main: #1f2937;
     --text-muted: #6b7280;
     --border-color: #e5e7eb;
@@ -93,7 +93,12 @@ input[type="range"] { width: 100%; max-width: 400px; cursor: pointer; }
     border-radius: 6px;
     padding: 1.25rem;
 }
-.tracker-panel { background-color: #f9fafb; display: flex; flex-direction: column; gap: 1rem; }
+.tracker-panel { 
+    background-color: #f9fafb; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1rem; 
+}
 
 .sample-text {
     background-color: #1e293b;
@@ -108,9 +113,10 @@ input[type="range"] { width: 100%; max-width: 400px; cursor: pointer; }
     margin-bottom: 1rem;
 }
 
-.badge { 
-    background-color: var(--warning-color); 
-    color: white; padding: 0.2rem 0.6rem; 
+.suggested-label { 
+    background-color: var(--info-color); 
+    color: black; 
+    padding: 0.2rem 0.6rem; 
     border-radius: 4px; 
     font-weight: bold; 
 }

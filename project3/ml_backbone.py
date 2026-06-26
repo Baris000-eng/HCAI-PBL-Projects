@@ -34,10 +34,9 @@ class DeferralSystemManager:
 
         # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
-        self.AL_queried_indices = []
         
         np.random.seed(42)
-        self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=20, replace=False))
+        self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=900, replace=False))
         for idx in self.AL_labeled_indices:
             if idx in self.AL_pool_indices:
                 self.AL_pool_indices.remove(idx)
@@ -50,10 +49,11 @@ class DeferralSystemManager:
         """Simulates bounded human expert decisions."""
         expert_preds = []
         for label in y_true:
-            if label == 1:  # Niche domain specialization
+            # Niche domain specialization
+            if label == 1:  
                 expert_preds.append(label)
             else:
-                if np.random.rand() < 0.75:
+                if np.random.rand() < 0.85:
                     expert_preds.append(label)
                 else:
                     remaining_classes = [c for c in range(4) if c != label]
