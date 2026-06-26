@@ -3,7 +3,7 @@
 # Create a virtual environment using conda or venv.
 
 ### venv virtual environment activation and deactivation in a MacOS / Linux OS ###
-# Navigate to your project folder
+# Navigate to the project folder
 cd path_to_the_project
 
 # Create the virtual environment folder, named 'hcai_env'
@@ -24,7 +24,7 @@ deactivate
 
 
 ### venv virtual environment activation and deactivation in a Windows OS ###
-# Navigate to your project folder
+# Navigate to the project folder
 cd path_to_the_project
 
 # Create the virtual environment folder
