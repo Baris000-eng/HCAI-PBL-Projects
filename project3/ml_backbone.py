@@ -34,9 +34,10 @@ class DeferralSystemManager:
 
         # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
+        print(len(self.AL_pool_indices))
         
         np.random.seed(42)
-        self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=900, replace=False))
+        self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=2000, replace=False))
         for idx in self.AL_labeled_indices:
             if idx in self.AL_pool_indices:
                 self.AL_pool_indices.remove(idx)

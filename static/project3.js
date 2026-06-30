@@ -108,7 +108,7 @@ async function submitQuery(labelSelected) {
 
         const data = await res.json();
 
-        const manualLabelCount = data.total_labeled_count - 900;
+        const manualLabelCount = data.total_labeled_count - 2000;
         
         // Update tracker UI metrics outputs
         document.getElementById("al-model-acc").innerText = (data.current_accuracy * 100).toFixed(2) + "%";
