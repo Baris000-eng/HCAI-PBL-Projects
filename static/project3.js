@@ -24,15 +24,16 @@ async function loadBaseMetrics() {
     try {
         const res = await fetch("/project3/api/metrics/");
         const data = await res.json();
+        console.log(data);
         
-        document.getElementById("txt-classifier-acc").innerText = (data.baseline_accuracy * 100).toFixed(2) + "%";
-        document.getElementById("txt-expert-acc").innerText = (data.expert_accuracy * 100).toFixed(2) + "%";
+        document.getElementById("text-classifier-acc").innerText = (data.baseline_accuracy * 100).toFixed(2) + "%";
+        document.getElementById("text-expert-acc").innerText = (data.expert_accuracy * 100).toFixed(2) + "%";
     } catch (err) {
         console.error("Error obtaining system baseline metrics:", err);
     }
 }
 
-// Task 3: Learning to Defer Loop caller
+// Learning to Defer Loop caller
 async function evaluateDeferralSystem(threshold) {
     try {
         const res = await fetch("/project3/api/learning_to_defer/", {
@@ -106,9 +107,12 @@ async function submitQuery(labelSelected) {
         }
 
         const data = await res.json();
+
+        const manualLabelCount = data.total_labeled_count - 900;
         
         // Update tracker UI metrics outputs
         document.getElementById("al-model-acc").innerText = (data.current_accuracy * 100).toFixed(2) + "%";
+        document.getElementById("al-manual-query-num").innerText = manualLabelCount;
         document.getElementById("al-query-count").innerText = data.total_labeled_count;
         
         // Advance queue to next active calculation query item

@@ -26,13 +26,13 @@
             <h2>System Baselines</h2>
             <div class="grid-2">
                 <div class="metric-box box-blue">
-                    <h3>Classifier Baseline</h3>
-                    <p id="txt-classifier-acc" class="metric-value">Loading...</p>
+                    <h3>Classifier Baseline Test Accuracy</h3>
+                    <p id="text-classifier-acc" class="metric-value">Loading...</p>
                 </div>
                 <div class="metric-box box-green">
-                    <h3>Simulated Expert Accuracy</h3>
-                    <p id="txt-expert-acc" class="metric-value">Loading...</p>
-                    <small>*Specialized expertise in Class 1 (Baseball)</small>
+                    <h3>Simulated Expert Test Accuracy</h3>
+                    <p id="text-expert-acc" class="metric-value">Loading...</p>
+                    <small>*Specialized expertise in Class 1 (Sports) </small>
                 </div>
             </div>
         </section>
@@ -69,7 +69,7 @@
             <div class="grid-2 mt-2">
                 <div class="al-panel">
                     <h3>Current Uncertain Sample Pool Item:</h3>
-                    <div id="sample-text-box" class="sample-text">Loading incoming pool data items...</div>
+                    <div id="sample-text-box" class="sample-text">Loading pool data items...</div>
                     <div class="meta-info">
                         <p><strong>Simulated Expert's Decision Recommendation:</strong><br><br><span id="expert-recom" class="suggested-label">--</span></p>
                     </div>
@@ -86,11 +86,15 @@
                     <h3>Active Learning Model Tracking:</h3>
                     <div class="metric-box box-purple">
                         <h4>Active Learner Model Accuracy</h4>
-                        <p id="al-model-acc" class="metric-value">Evaluating...</p>
+                        <p id="al-model-acc" class="metric-value">0% (Awaiting the first query)</p>
                     </div>
-                    <div class="metric-box">
-                        <h4>Total Active Queries Collected</h4>
-                        <p id="al-query-count" class="metric-value">0</p>
+                    <div class="metric-box box-purple">
+                        <h4>Number of Manual Active Learning Queries by User</h4>
+                         <p id="al-manual-query-num" class="metric-value">0 (Awaiting the first query)</p>
+                    </div>
+                    <div class="metric-box box-purple">
+                        <h4>Total Active Learning Queries Collected</h4>
+                        <p id="al-query-count" class="metric-value">900 (Number of Initially Labeled and Trained Seeds)</p>
                     </div>
                 </div>
             </div>

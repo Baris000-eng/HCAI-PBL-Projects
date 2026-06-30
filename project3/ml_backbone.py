@@ -23,13 +23,13 @@ class DeferralSystemManager:
         self.X_test = self.vectorizer.transform(self.X_test_raw).toarray()
 
         # Baseline Classifier
-        self.baseline_model = LogisticRegression(C=1.0)
+        self.baseline_model = LogisticRegression(C=0.4, max_iter=200)
         self.baseline_model.fit(self.X_train, self.y_train)
-        self.baseline_preds = self.baseline_model.predict(self.X_test)
-        self.baseline_acc = float(accuracy_score(self.y_test, self.baseline_preds))
+        self.baseline_test_preds = self.baseline_model.predict(self.X_test)
+        self.baseline_acc = float(accuracy_score(self.y_test, self.baseline_test_preds))
 
         # Simulated Expert
-        self.expert_test_preds = self.simulate_expert_predict(self.X_test_raw, self.y_test)
+        self.expert_test_preds = self.simulate_expert_predict(self.y_test)
         self.expert_acc = float(accuracy_score(self.y_test, self.expert_test_preds))
 
         # Active Learning Setup
@@ -42,10 +42,10 @@ class DeferralSystemManager:
                 self.AL_pool_indices.remove(idx)
 
         # Dynamic model tracking state
-        self.al_model = LogisticRegression(C=1.0)
+        self.al_model = LogisticRegression(C=0.4, max_iter=200)
         self.al_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
 
-    def simulate_expert_predict(self, X_raw, y_true):
+    def simulate_expert_predict(self, y_true):
         """Simulates bounded human expert decisions."""
         expert_preds = []
         for label in y_true:
@@ -95,7 +95,7 @@ class DeferralSystemManager:
         uncertain_pool_idx = np.argmin(max_pool_probs)
         global_idx = self.AL_pool_indices[uncertain_pool_idx]
         
-        simulated_label = self.simulate_expert_predict([self.X_train_raw[global_idx]], [self.y_train[global_idx]])[0]
+        simulated_label = self.simulate_expert_predict([self.y_train[global_idx]])[0]
 
         return {
             'sample_index': int(global_idx),
