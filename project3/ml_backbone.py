@@ -7,6 +7,9 @@ from sklearn.metrics import accuracy_score
 
 class DeferralSystemManager:
     def __init__(self):
+
+        np.random.seed(42)
+
         # Import the ag_news data
         dataset = load_dataset("fancyzhx/ag_news")
         self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
@@ -34,27 +37,26 @@ class DeferralSystemManager:
 
         # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
-        print(len(self.AL_pool_indices))
+        print("Number of news in the training dataset: "+str(len(self.AL_pool_indices))+"")
         
-        np.random.seed(42)
         self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=2000, replace=False))
         for idx in self.AL_labeled_indices:
             if idx in self.AL_pool_indices:
                 self.AL_pool_indices.remove(idx)
 
-        # Dynamic model tracking state
-        self.al_model = LogisticRegression(C=0.4, max_iter=200)
-        self.al_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
+        # Active learning model training stage 
+        self.active_learning_model = LogisticRegression(C=0.4, max_iter=200)
+        self.active_learning_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
 
     def simulate_expert_predict(self, y_true):
         """Simulates bounded human expert decisions."""
         expert_preds = []
         for label in y_true:
-            # Niche domain specialization
+            # Specific domain specialization
             if label == 1:  
                 expert_preds.append(label)
             else:
-                if np.random.rand() < 0.85:
+                if np.random.rand() < 0.90:
                     expert_preds.append(label)
                 else:
                     remaining_classes = [c for c in range(4) if c != label]
@@ -69,6 +71,8 @@ class DeferralSystemManager:
 
         final_predictions = []
         deferral_count = 0
+        undeferral_count = 0
+
 
         for i in range(len(self.X_test)):
             if max_probs[i] < threshold:
@@ -76,12 +80,14 @@ class DeferralSystemManager:
                 deferral_count += 1
             else:
                 final_predictions.append(classifier_preds[i])
+                undeferral_count += 1
 
         system_accuracy = float(accuracy_score(self.y_test, final_predictions))
         return {
             'system_accuracy': system_accuracy,
             'deferral_rate': float(deferral_count / len(self.X_test)),
             'deferred_count': deferral_count,
+            'undeferred_count': undeferral_count,
             'total_count': len(self.X_test)
         }
 
@@ -90,7 +96,7 @@ class DeferralSystemManager:
         if not self.AL_pool_indices:
             return None
 
-        pool_probs = self.al_model.predict_proba(self.X_train[self.AL_pool_indices])
+        pool_probs = self.active_learning_model.predict_proba(self.X_train[self.AL_pool_indices])
         max_pool_probs = np.max(pool_probs, axis=1)
 
         uncertain_pool_idx = np.argmin(max_pool_probs)
@@ -117,12 +123,12 @@ class DeferralSystemManager:
         self.y_train[idx] = chosen_label
 
         # Retrain dynamic tracker model instance
-        self.al_model = LogisticRegression(C=1.0)
+        self.active_learning_model = LogisticRegression(C=1.0)
         X_train = self.X_train[self.AL_labeled_indices]
         y_train = self.y_train[self.AL_labeled_indices]
-        self.al_model.fit(X_train, y_train)
+        self.active_learning_model.fit(X_train, y_train)
 
-        al_preds = self.al_model.predict(self.X_test)
+        al_preds = self.active_learning_model.predict(self.X_test)
         current_al_acc = float(accuracy_score(self.y_test, al_preds))
 
         return {
