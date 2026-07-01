@@ -67,18 +67,22 @@ class DeferralSystemManager:
         """Dispatches low-confidence choices to human or expert pipelines."""
         probs = self.baseline_model.predict_proba(self.X_test)
         max_probs = np.max(probs, axis=1)
-        classifier_preds = np.argmax(probs, axis=1)
+        classifier_test_preds = np.argmax(probs, axis=1)
 
         final_predictions = []
+
         deferral_count = 0
         undeferral_count = 0
+
         true_deferral_count = 0 
         false_deferral_count = 0 
+        
+        true_undeferral_count = 0 
+        false_undeferral_count = 0 
 
 
         for i in range(len(self.X_test)):
-            is_classifier_correct = (classifier_preds[i] == self.y_test[i])
-            is_expert_correct = (self.expert_test_preds[i] == self.y_test[i])
+            is_classifier_correct = (classifier_test_preds[i] == self.y_test[i])
 
             if max_probs[i] < threshold:
                 final_predictions.append(self.expert_test_preds[i])
@@ -90,23 +94,39 @@ class DeferralSystemManager:
                     false_deferral_count+=1
 
             else:
-                final_predictions.append(classifier_preds[i])
+                final_predictions.append(classifier_test_preds[i])
                 undeferral_count += 1
 
+                if is_classifier_correct:
+                    true_undeferral_count+=1
+                else:
+                    false_undeferral_count+=1
+
+
+
         system_accuracy = float(accuracy_score(self.y_test, final_predictions))
-        denom = true_deferral_count + false_deferral_count
-        true_deferral_rate = float(true_deferral_count / denom) if denom > 0 else 0.0
-        false_deferral_rate = float(false_deferral_count / denom) if denom > 0 else 0.0
+        denom_deferral = true_deferral_count + false_deferral_count
+        true_deferral_rate = float(true_deferral_count / denom_deferral) if denom_deferral > 0 else 0.0
+        false_deferral_rate = float(false_deferral_count / denom_deferral) if denom_deferral > 0 else 0.0
+
+
+        denom_undeferral = true_undeferral_count + false_undeferral_count
+        true_undeferral_rate = float(true_undeferral_count / denom_undeferral) if denom_undeferral > 0 else 0.0
+        false_undeferral_rate = float(false_undeferral_count / denom_undeferral) if denom_undeferral > 0 else 0.0
 
         return {
             'system_accuracy': system_accuracy,
             'deferral_rate': float(deferral_count / len(self.X_test)),
             'true_deferral_rate': true_deferral_rate,
             'false_deferral_rate':  false_deferral_rate,
+            'true_undeferral_rate': true_undeferral_rate,
+            'false_undeferral_rate': false_undeferral_rate,
             'deferred_count': deferral_count,
             'undeferred_count': undeferral_count,
             'true_deferred_count': true_deferral_count,
             'false_deferred_count': false_deferral_count,
+            'true_undeferred_count': true_undeferral_count, 
+            'false_undeferred_count': false_undeferral_count,
             'total_count': len(self.X_test)
         }
 
