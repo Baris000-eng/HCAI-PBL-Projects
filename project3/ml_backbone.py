@@ -72,22 +72,41 @@ class DeferralSystemManager:
         final_predictions = []
         deferral_count = 0
         undeferral_count = 0
+        true_deferral_count = 0 
+        false_deferral_count = 0 
 
 
         for i in range(len(self.X_test)):
+            is_classifier_correct = (classifier_preds[i] == self.y_test[i])
+            is_expert_correct = (self.expert_test_preds[i] == self.y_test[i])
+
             if max_probs[i] < threshold:
                 final_predictions.append(self.expert_test_preds[i])
                 deferral_count += 1
+
+                if not is_classifier_correct:
+                    true_deferral_count+=1
+                else:
+                    false_deferral_count+=1
+
             else:
                 final_predictions.append(classifier_preds[i])
                 undeferral_count += 1
 
         system_accuracy = float(accuracy_score(self.y_test, final_predictions))
+        denom = true_deferral_count + false_deferral_count
+        true_deferral_rate = float(true_deferral_count / denom) if denom > 0 else 0.0
+        false_deferral_rate = float(false_deferral_count / denom) if denom > 0 else 0.0
+
         return {
             'system_accuracy': system_accuracy,
             'deferral_rate': float(deferral_count / len(self.X_test)),
+            'true_deferral_rate': true_deferral_rate,
+            'false_deferral_rate':  false_deferral_rate,
             'deferred_count': deferral_count,
             'undeferred_count': undeferral_count,
+            'true_deferred_count': true_deferral_count,
+            'false_deferred_count': false_deferral_count,
             'total_count': len(self.X_test)
         }
 
@@ -123,7 +142,6 @@ class DeferralSystemManager:
         self.y_train[idx] = chosen_label
 
         # Retrain dynamic tracker model instance
-        self.active_learning_model = LogisticRegression(C=1.0)
         X_train = self.X_train[self.AL_labeled_indices]
         y_train = self.y_train[self.AL_labeled_indices]
         self.active_learning_model.fit(X_train, y_train)

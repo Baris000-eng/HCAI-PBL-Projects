@@ -42,8 +42,8 @@
             <p>Adjust system confidence threshold. Instances below this confidence value are routed to the expert.</p>
             
             <div class="control-group">
-                <label for="threshold-slider">Confidence Threshold: <span id="threshold-val">0.75</span></label>
-                <input type="range" id="threshold-slider" min="0.0" max="1.0" step="0.05" value="0.75">
+                <label for="threshold-slider">Confidence Threshold: <span id="threshold-val">0.60</span></label>
+                <input type="range" id="threshold-slider" min="0.00" max="1.00" step="0.005" value="0.60">
             </div>
 
             <div class="grid-3 mt-2">
@@ -56,12 +56,28 @@
                     <p id="defer-rate" class="metric-value">--</p>
                 </div>
                 <div class="metric-box">
+                    <h4>True Deferral Rate</h4>
+                    <p id="true-defer-rate" class="metric-value">--</p>
+                </div>
+                <div class="metric-box">
+                    <h4>False Deferral Rate</h4>
+                    <p id="false-defer-rate" class="metric-value">--</p>
+                </div>
+                <div class="metric-box">
                     <h4>Number of Samples Handed Over to Expert</h4>
                     <p id="deferred-count" class="metric-value">--</p>
                 </div>
                  <div class="metric-box">
                     <h4>Number of Samples Not Handed Over to Expert</h4>
                     <p id="undeferred-count" class="metric-value">--</p>
+                </div>
+                <div class="metric-box">
+                    <h4>Number of Samples Truely Handed Over to Expert</h4>
+                    <p id="true-deferred-count" class="metric-value">--</p>
+                </div>
+                <div class="metric-box">
+                    <h4>Number of Samples Falsely Handed Over to Expert</h4>
+                    <p id="false-deferred-count" class="metric-value">--</p>
                 </div>
                 <div class="metric-box">
                     <h4>Number of Samples</h4>

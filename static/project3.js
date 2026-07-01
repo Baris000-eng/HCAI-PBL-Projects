@@ -46,8 +46,12 @@ async function evaluateDeferralSystem(threshold) {
         
         document.getElementById("defer-system-acc").innerText = (data.system_accuracy * 100).toFixed(2) + "%";
         document.getElementById("defer-rate").innerText = (data.deferral_rate * 100).toFixed(2) + "%";
+        document.getElementById("true-defer-rate").innerText = (data.true_deferral_rate * 100).toFixed(2) + "%";
+        document.getElementById("false-defer-rate").innerText = (data.false_deferral_rate * 100).toFixed(2) + "%";
         document.getElementById("deferred-count").innerText = `${data.deferred_count}`;
         document.getElementById("undeferred-count").innerText = `${data.undeferred_count}`;
+        document.getElementById("true-deferred-count").innerText = `${data.true_deferred_count}`;
+        document.getElementById("false-deferred-count").innerText = `${data.false_deferred_count}`;
         document.getElementById("total-count").innerText = `${data.total_count}`;
     } catch (err) {
         console.error("Error parsing deferral strategy response:", err);
