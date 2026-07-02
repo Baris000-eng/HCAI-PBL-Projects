@@ -38,7 +38,8 @@ class DeferralSystemManager:
 
         # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
-        print("Number of news in the training dataset: "+str(len(self.AL_pool_indices))+"")
+        print("Number of news in the training dataset: "+str(len(self.X_train))+"")
+        print("Number of news in the testing dataset: "+str(len(self.X_test))+"")
         
         self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=2000, replace=False))
         for idx in self.AL_labeled_indices:
@@ -118,9 +119,11 @@ class DeferralSystemManager:
         true_undeferral_rate = float(true_undeferral_count / denom_undeferral) if denom_undeferral > 0 else 0.0
         false_undeferral_rate = float(false_undeferral_count / denom_undeferral) if denom_undeferral > 0 else 0.0
 
+        deferral_rate = float(deferral_count / len(self.X_test)) if len(self.X_test) > 0 else 0.0
+
         return {
             'system_accuracy': system_accuracy,
-            'deferral_rate': float(deferral_count / len(self.X_test)),
+            'deferral_rate': deferral_rate,
             'true_deferral_rate': true_deferral_rate,
             'false_deferral_rate':  false_deferral_rate,
             'true_undeferral_rate': true_undeferral_rate,
@@ -187,12 +190,12 @@ class DeferralSystemManager:
             'accuracy_gain_per_query': (current_al_acc - self.accuracy_history[-2]) if len(self.accuracy_history) > 1 else 0
         }
     
-    def plot_metrics(self, save_path="accuracy_growth_curve.png"):
+    def plot_metrics(self, save_path="accuracy_growth_graph.png"):
         plt.figure(figsize=(10, 5))
         plt.plot(self.query_history, self.accuracy_history, marker='o')
-        plt.title('Accuracy Growth Curve')
-        plt.xlabel('Number of Labeled Samples')
-        plt.ylabel('Model Accuracy')
+        plt.title("Test Accuracy Growth Graph During Active Learning")
+        plt.xlabel("Number of Labeled Samples")
+        plt.ylabel("Model's Test Accuracy")
         plt.grid(True)
         
        # Save the plot first 
@@ -203,16 +206,18 @@ class DeferralSystemManager:
         plt.show()
     
     def get_disagreement_metrics(self):
-        """Measures how often model is wrong while expert is right."""
+        """Measures how often the active learningmodel is wrong while the simulated expert is right."""
         model_preds = self.active_learning_model.predict(self.X_test)
         model_wrong = (model_preds != self.y_test)
         expert_right = (self.expert_test_preds == self.y_test)
         
-        # Intersection: THe model is wrong AND expert is right (The 'Deferral Opportunity')
+        # The model is wrong and the expert is right 
         disagreement_mask = model_wrong & expert_right
         disagreement_rate = np.mean(disagreement_mask)
+        agreement_rate = 1 - disagreement_rate 
         
         return {
+            'agreement_rate': float(agreement_rate), 
             'disagreement_rate': float(disagreement_rate),
             'total_deferral_opportunities': int(np.sum(disagreement_mask))
         }

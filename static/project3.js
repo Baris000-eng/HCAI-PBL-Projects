@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initLearningToDefer();
     loadNextActiveLearningSample();
 
+    document.getElementById("al-model-acc").innerText = "0% (Awaiting the first query)";
+    document.getElementById("al-manual-query-num").innerText = "0 (Awaiting the first query)";
+    document.getElementById("al-query-count").innerText = "2000 (Number of Initially Labeled and Trained Seeds)";
+
     // Event listeners
     document.getElementById("threshold-slider").addEventListener("input", (e) => {
         document.getElementById("threshold-val").innerText = e.target.value;
