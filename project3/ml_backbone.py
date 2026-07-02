@@ -1,5 +1,6 @@
 import numpy as np
 from datasets import load_dataset 
+import matplotlib.pyplot as plt 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -47,6 +48,9 @@ class DeferralSystemManager:
         # Active learning model training stage 
         self.active_learning_model = LogisticRegression(C=0.4, max_iter=200)
         self.active_learning_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
+
+        self.accuracy_history = [self.active_learning_model.score(self.X_test, self.y_test)]
+        self.query_history = [len(self.AL_labeled_indices)]
 
     def simulate_expert_predict(self, y_true):
         """Simulates bounded human expert decisions."""
@@ -168,12 +172,53 @@ class DeferralSystemManager:
 
         al_preds = self.active_learning_model.predict(self.X_test)
         current_al_acc = float(accuracy_score(self.y_test, al_preds))
+        self.accuracy_history.append(current_al_acc)
+        self.query_history.append(len(self.AL_labeled_indices))
+
+        # Get the new disagreement metrics after retraining
+        disagreement_data = self.get_disagreement_metrics()
 
         return {
             'status': 'success',
             'current_accuracy': current_al_acc,
-            'total_labeled_count': len(self.AL_labeled_indices)
+            'total_labeled_count': len(self.AL_labeled_indices),
+            'disagreement_rate': disagreement_data['disagreement_rate'],
+            'total_deferral_opportunities': disagreement_data['total_deferral_opportunities'],
+            'accuracy_gain_per_query': (current_al_acc - self.accuracy_history[-2]) if len(self.accuracy_history) > 1 else 0
         }
+    
+    def plot_metrics(self, save_path="accuracy_growth_curve.png"):
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.query_history, self.accuracy_history, marker='o')
+        plt.title('Accuracy Growth Curve')
+        plt.xlabel('Number of Labeled Samples')
+        plt.ylabel('Model Accuracy')
+        plt.grid(True)
+        
+       # Save the plot first 
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"Plot successfully saved to: {save_path}")
+        
+        # Then, display the plot
+        plt.show()
+    
+    def get_disagreement_metrics(self):
+        """Measures how often model is wrong while expert is right."""
+        model_preds = self.active_learning_model.predict(self.X_test)
+        model_wrong = (model_preds != self.y_test)
+        expert_right = (self.expert_test_preds == self.y_test)
+        
+        # Intersection: THe model is wrong AND expert is right (The 'Deferral Opportunity')
+        disagreement_mask = model_wrong & expert_right
+        disagreement_rate = np.mean(disagreement_mask)
+        
+        return {
+            'disagreement_rate': float(disagreement_rate),
+            'total_deferral_opportunities': int(np.sum(disagreement_mask))
+        }
+    
+
+
 
 # Instantiate singleton class instance across the lifecycle
 ml_manager = DeferralSystemManager()
