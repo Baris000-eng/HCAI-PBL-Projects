@@ -6,7 +6,15 @@ from .ml_backbone import ml_manager
 
 def index(request):
     """Renders dashboard user interface workspace template context view."""
-    return render(request, 'project3/index.html')
+    recent_al_accuracy = ml_manager.accuracy_history[-1]
+    recent_total_queries = ml_manager.query_history[-1]
+    manual_queries = recent_total_queries - 2000
+    active_learning_context = {
+        'recent_al_accuracy': recent_al_accuracy * 100,
+        'recent_query_count': recent_total_queries,
+        'manual_query_count': manual_queries
+    }
+    return render(request, 'project3/index.html', active_learning_context)
 
 def get_metrics(request):
     """Returns baseline statistics."""
@@ -55,3 +63,4 @@ def al_query(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+

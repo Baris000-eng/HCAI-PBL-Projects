@@ -183,7 +183,7 @@ class DeferralSystemManager:
 
         return {
             'status': 'success',
-            'current_accuracy': current_al_acc,
+            'current_test_accuracy': current_al_acc,
             'total_labeled_count': len(self.AL_labeled_indices),
             'disagreement_rate': disagreement_data['disagreement_rate'],
             'total_deferral_opportunities': disagreement_data['total_deferral_opportunities'],
@@ -219,7 +219,8 @@ class DeferralSystemManager:
         return {
             'agreement_rate': float(agreement_rate), 
             'disagreement_rate': float(disagreement_rate),
-            'total_deferral_opportunities': int(np.sum(disagreement_mask))
+            'total_deferral_opportunities': int(np.sum(disagreement_mask)),
+            'initial_model_accuracy': float(self.accuracy_history[0])
         }
     
 

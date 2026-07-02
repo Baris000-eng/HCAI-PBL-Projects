@@ -30,7 +30,7 @@ for i in range(num_queries_to_run):
     
     # Log the progress 
     print(f"Query {i+1}/{num_queries_to_run} | "
-          f"Acc: {update_result['current_accuracy']:.4f} | "
+          f"Acc: {update_result['current_test_accuracy']:.4f} | "
           f"Accuracy Gain/Loss Per Query: {update_result['accuracy_gain_per_query']:.4f} | "
           f"Remaining Deferral Ops: {update_result['total_deferral_opportunities']}")
 

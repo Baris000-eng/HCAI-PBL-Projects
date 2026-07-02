@@ -110,7 +110,7 @@
             <div class="grid-2 mt-2">
                 <div class="al-panel">
                     <h3>Current Uncertain Sample Pool Item:</h3>
-                    <div id="sample-text-box" class="sample-text">Loading pool data items...</div>
+                    <div id="sample-text-box" class="sample-text">Loading pool data items ...</div>
                     <div class="meta-info">
                         <p><strong>Simulated Expert's Decision Recommendation:</strong><br><br><span id="expert-recom" class="suggested-label">--</span></p>
                     </div>
@@ -127,15 +127,17 @@
                     <h3>Active Learning Model Tracking:</h3>
                     <div class="metric-box box-purple">
                         <h4>Active Learner Model Accuracy</h4>
-                        <p id="al-model-acc" class="metric-value">0% (Awaiting the first query)</p>
+                        <p id="al-model-test-acc" class="metric-value">
+                            {{ recent_al_accuracy |floatformat:2 }} %
+                        </p>
                     </div>
                     <div class="metric-box box-purple">
                         <h4>Number of Manual Active Learning Queries by User</h4>
-                         <p id="al-manual-query-num" class="metric-value">0 (Awaiting the first query)</p>
+                         <p id="al-manual-query-num" class="metric-value">{{ manual_query_count }}</p>
                     </div>
                     <div class="metric-box box-purple">
                         <h4>Total Active Learning Queries Collected</h4>
-                        <p id="al-query-count" class="metric-value">2000 (Number of Initially Labeled and Trained Seeds)</p>
+                        <p id="al-query-count" class="metric-value">{{ recent_query_count }} (Number of Initially Labeled and Trained Seeds: 2000)</p>
                     </div>
                 </div>
             </div>

@@ -4,13 +4,10 @@ let currentSampleSimulatedLabel = null;
 let categoryLabels = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+
     loadBaseMetrics();
     initLearningToDefer();
     loadNextActiveLearningSample();
-
-    document.getElementById("al-model-acc").innerText = "0% (Awaiting the first query)";
-    document.getElementById("al-manual-query-num").innerText = "0 (Awaiting the first query)";
-    document.getElementById("al-query-count").innerText = "2000 (Number of Initially Labeled and Trained Seeds)";
 
     // Event listeners
     document.getElementById("threshold-slider").addEventListener("input", (e) => {
@@ -37,6 +34,7 @@ async function loadBaseMetrics() {
     }
 }
 
+
 // Learning to Defer Loop caller
 async function evaluateDeferralSystem(threshold) {
     try {
@@ -46,7 +44,7 @@ async function evaluateDeferralSystem(threshold) {
             body: JSON.stringify({ threshold: parseFloat(threshold) })
         });
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         
         document.getElementById("defer-system-acc").innerText = (data.system_accuracy * 100).toFixed(2) + "%";
         document.getElementById("defer-rate").innerText = (data.deferral_rate * 100).toFixed(2) + "%";
@@ -121,17 +119,16 @@ async function submitQuery(labelSelected) {
             throw new Error("Labeling task is completed. No more samples are available in the active learning pool.");
         }
 
-        const data = await res.json();
-
-        const manualLabelCount = data.total_labeled_count - 2000;
+        const activeLearningData = await res.json();
         
-        // Update tracker UI metrics outputs
-        document.getElementById("al-model-acc").innerText = (data.current_accuracy * 100).toFixed(2) + "%";
+        const manualLabelCount = activeLearningData.total_labeled_count - 2000;
+            
+        document.getElementById("al-model-test-acc").innerText = (activeLearningData.current_test_accuracy * 100).toFixed(2) + "%";
         document.getElementById("al-manual-query-num").innerText = manualLabelCount;
-        document.getElementById("al-query-count").innerText = data.total_labeled_count;
+        document.getElementById("al-query-count").innerText = activeLearningData.total_labeled_count + " " + "(Number of Initially Labeled and Trained Seeds: 2000)";
         
         // Advance queue to next active calculation query item
-        loadNextActiveLearningSample();
+        await loadNextActiveLearningSample();
     } catch (err) {
         console.error("Error setting Active Learning label submission:", err);
     }
