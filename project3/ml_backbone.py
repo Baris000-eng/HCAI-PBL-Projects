@@ -159,7 +159,7 @@ class DeferralSystemManager:
         }
 
     def process_query_update(self, idx, chosen_label):
-        """Absorbs feedback loop entries and updates the active learner."""
+        """Integrates feedback loop entries and updates the active learner."""
         if idx in self.AL_pool_indices:
             self.AL_pool_indices.remove(idx)
         if idx not in self.AL_labeled_indices:
@@ -206,7 +206,7 @@ class DeferralSystemManager:
         plt.show()
     
     def get_disagreement_metrics(self):
-        """Measures how often the active learningmodel is wrong while the simulated expert is right."""
+        """Measures how often the active learning model is wrong while the simulated expert is right."""
         model_preds = self.active_learning_model.predict(self.X_test)
         model_wrong = (model_preds != self.y_test)
         expert_right = (self.expert_test_preds == self.y_test)
