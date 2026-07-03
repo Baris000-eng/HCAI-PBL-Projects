@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .finally(() => {
                 plotButton.disabled = false;
-                plotButton.innerText = "Generate Accuracy Growth Graph";
+                plotButton.innerText = "Generate Test Accuracy Growth Graph";
             });
         });
     }
