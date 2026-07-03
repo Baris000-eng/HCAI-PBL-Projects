@@ -1,9 +1,21 @@
+import io 
+import os 
+import base64
 import numpy as np
 from datasets import load_dataset 
+
+import matplotlib 
+
+# Use a non-interactive backend for plotting with matplotlib to avoid GUI issues in server environments 
+matplotlib.use('Agg') 
 import matplotlib.pyplot as plt 
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from django.http import JsonResponse
+
+
 
 
 class DeferralSystemManager:
@@ -204,6 +216,38 @@ class DeferralSystemManager:
         
         # Then, display the plot
         plt.show()
+
+    def plot_metrics_and_show_in_web(self, save_path="accuracy_growth_graph.png"):
+        """
+        Saves the accuracy growth chart using the provided OS path string 
+        and returns a base64 encoded string to display directly on the dashboard.
+        """
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.query_history, self.accuracy_history, marker='o', color='#6f42c1')
+        plt.title("Test Accuracy Growth Graph During Active Learning")
+        plt.xlabel("Number of Labeled Samples")
+        plt.ylabel("Model's Test Accuracy")
+        plt.grid(True)
+        
+        # Save to the file system using the strict OS path
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"Plot successfully saved to: {save_path}")
+        
+        # Save to an in-memory byte buffer for web transport
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        
+        # Convert raw binary image bytes into a web-safe base64 text string
+        image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+        
+        # Clean up memory buffers and figures to prevent memory leaks
+        buf.close()
+        plt.close()
+        
+        # Return standard HTML Image Source compliant Data URI
+        return f"data:image/png;base64,{image_base64}"
+    
     
     def get_disagreement_metrics(self):
         """Measures how often the active learning model is wrong while the simulated expert is right."""

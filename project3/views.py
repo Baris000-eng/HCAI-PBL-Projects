@@ -1,8 +1,50 @@
+import os 
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .ml_backbone import ml_manager
+
+@csrf_exempt
+def clear_plot(request, save_path="accuracy_growth_graph.png"): 
+    """Clears the saved plot file from the user interface and static directory"""
+    try:
+        if os.path.exists(save_path): 
+            os.remove(save_path)
+        return JsonResponse({"status": "success", "message": "Graph is deleted from the server."})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+@csrf_exempt
+def trigger_plot_metrics(request):
+    if request.method == 'POST':
+        try:
+            current_file_path = os.path.abspath(__file__)
+            app_directory = os.path.dirname(current_file_path)
+            base_directory = os.path.dirname(app_directory)
+
+            # Target project's static folder using strict OS paths
+            save_path = os.path.join(base_directory, 'static', 'accuracy_growth_graph.png')
+            
+            # Ensure static directory exists
+            output_dir = os.path.dirname(save_path)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            
+            image_data_uri = ml_manager.plot_metrics_and_show_in_web(save_path=save_path)
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Plot executed successfully.',
+                'image_data': image_data_uri  
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+            
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
 
 def index(request):
     """Renders dashboard user interface workspace template context view."""

@@ -139,6 +139,21 @@
                         <h4>Total Active Learning Queries Collected</h4>
                         <p id="al-query-count" class="metric-value">{{ recent_query_count }} (Number of Initially Labeled and Trained Seeds: 2000)</p>
                     </div>
+                    <div class="action-buttons mt-2">
+                         <button id="btn-plot-metrics" class="btn btn-primary">
+                            Generate Test Accuracy Growth Graph
+                        </button>
+                    </div>
+                    <div class="action-buttons mt-2">
+                         <button id="btn-clear-plot" class="btn btn-primary">
+                            Clear Test Accuracy Growth Graph
+                        </button>
+                    </div>
+
+                    <div id="plot-container" style="margin-top: 20px; text-align: center;">
+                         <img id="al-graph-img" src="" alt="Accuracy Growth Graph" style="display: none; width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+                    </div>
+
                 </div>
             </div>
         </section>

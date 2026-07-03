@@ -134,3 +134,55 @@ async function submitQuery(labelSelected) {
     }
 }
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    const plotButton = document.getElementById('btn-plot-metrics');
+
+    if (plotButton) {
+        plotButton.addEventListener('click', () => {
+            plotButton.innerText = "Generating ...";
+
+            fetch('/project3/api/plot-metrics/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const imgElement = document.getElementById('al-graph-img');
+                    imgElement.src = data.image_data;
+                    imgElement.style.display = 'block';
+                } else {
+                    alert('Error happened in generating graph!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Server communication failed.');
+            })
+            .finally(() => {
+                plotButton.disabled = false;
+                plotButton.innerText = "Generate Accuracy Growth Graph";
+            });
+        });
+    }
+});
+
+
+const clearButton = document.getElementById('btn-clear-plot');
+if (clearButton) {
+    clearButton.addEventListener('click', () => {
+        fetch('/project3/api/clear-plot/', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const imgElement = document.getElementById('al-graph-img');
+                imgElement.style.display = 'none'; // Hide the image
+                imgElement.src = ""; // Clear the source
+            }
+        });
+    });
+}
+
