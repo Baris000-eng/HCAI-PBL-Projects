@@ -23,7 +23,7 @@ def trigger_plot_metrics(request):
             app_directory = os.path.dirname(current_file_path)
             base_directory = os.path.dirname(app_directory)
 
-            # Target project's static folder to save the plot image 
+            # Save the plot image under the static folder of the project
             save_path = os.path.join(base_directory, 'static', 'accuracy_growth_graph.png')
             
             # Ensure static directory exists
