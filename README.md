@@ -126,7 +126,7 @@ Open your terminal and execute the following commands sequentially:
 
 ```bash
 # Navigate to your root project directory
-cd path_to_the_project
+cd path_to_the_project_directory
 ```
 
 ```bash
@@ -160,7 +160,7 @@ Open Command Prompt or PowerShell and execute the following commands sequentiall
 
 ```bash
 #  Navigate to your root project directory
-cd path_to_the_project
+cd path_to_the_project_directory
 ```
 
 ```bash
@@ -204,7 +204,7 @@ conda activate hcai_env
 
 ```bash
 # Move into the project directory containing the source code
-cd path_to_the_project
+cd path_to_the_project_directory
 ```
 
 ### Install the required project dependencies
