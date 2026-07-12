@@ -2,6 +2,83 @@ This is the repository including Django-Based Human-Centric Artificial Intellige
 
 # How to Get Started with Development? 
 
+## Firstly, it is recommended to create a virtual environment. 
+
+# Virtual Environment Setup & Dependency Installation
+
+This guide walks you through setting up an isolated Python environment and installing all required libraries for **Project1** (which houses the Django application and ML-based scripts, such as `views.py`). Choose **one** of the configuration paths below depending on your operating system and environment manager preference.
+
+## Method 1: Using `venv` (Standard Python)
+
+### MacOS / Linux
+Open your terminal and execute the following commands sequentially:
+```bash
+# 1. Navigate to your root project directory
+cd path_to_the_project
+
+# 2. Initialize a virtual environment named 'hcai_env'
+python3 -m venv hcai_env
+
+# 3. Activate the virtual environment
+source hcai_env/bin/activate
+
+# 4. Move into the project directory containing the source code
+cd project_folder
+
+# 5. Install the required project dependencies
+pip install -r requirements.txt
+
+# 6. Deactivate the environment once your session is complete
+deactivate```
+
+Windows OS
+Open Command Prompt or PowerShell and execute the following commands sequentially:
+
+```bash
+1. Navigate to your root project directory
+cd path_to_the_project
+
+2. Initialize a virtual environment named 'hcai_env'
+python -m venv hcai_env
+
+3. Activate the virtual environment
+.\hcai_env\Scripts\activate
+
+4. Move into the 'project1' directory containing the source code
+cd project1
+
+5. Install the required project dependencies
+pip install -r requirements.txt
+
+6. Deactivate the environment once your session is complete
+deactivate
+```
+
+## Method 2: Using conda (Anaconda / Miniconda)
+
+This method is platform-independent and works across Windows, MacOS, and Linux. Open your terminal or Conda Prompt and execute the following commands sequentially:
+
+```bash
+# 1. Create a new conda environment named 'hcai_env' using Python 3.12 
+conda create --name hcai_env python=3.12 -y
+
+# 2. Activate the newly created environment
+conda activate hcai_env
+
+# 3. Move into the 'project1' directory containing the source code
+cd path_to_the_project/project1
+
+# 4. Install the required project dependencies
+# Option A: Standard Pip installation (Recommended for mixed Django/ML environments)
+pip install -r requirements.txt
+# Option B: Native Conda installation
+conda install --file requirements.txt
+
+# 5. Deactivate the environment when you are done working
+conda deactivate
+```
+
+
 ## Used Library Versions Guide
 
 ### Used Python Version: Python 3.12.2
