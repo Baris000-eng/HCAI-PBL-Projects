@@ -39,19 +39,19 @@ Open Command Prompt or PowerShell and execute the following commands sequentiall
 #  Navigate to your root project directory
 cd path_to_the_project
 
-#  Initialize a virtual environment named 'hcai_env'
+# Initialize a virtual environment named 'hcai_env'
 python -m venv hcai_env
 
-#  Activate the virtual environment
+# Activate the virtual environment
 .\hcai_env\Scripts\activate
 
-#  Move into the 'project1' directory containing the source code
+# Move into the 'project1' directory containing the source code
 cd project1
 
-#  Install the required project dependencies
+# Install the required project dependencies
 pip install -r requirements.txt
 
-#  Deactivate the environment once your session is complete
+# Deactivate the environment once your session is complete
 deactivate
 ```
 
