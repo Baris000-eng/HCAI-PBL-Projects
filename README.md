@@ -12,22 +12,34 @@ This guide walks you through setting up an isolated Python environment and insta
 
 ### MacOS / Linux
 Open your terminal and execute the following commands sequentially:
+
 ```bash
 # Navigate to your root project directory
 cd path_to_the_project
+```
 
+```bash
 # Initialize a virtual environment named 'hcai_env'
 python3 -m venv hcai_env
+```
 
+```bash
 # Activate the virtual environment
 source hcai_env/bin/activate
+```
 
+```bash
 # Move into the project directory containing the source code
 cd project_folder
+```
 
+```bash
 # Install the required project dependencies
 pip install -r requirements.txt
+```
 
+
+```bash
 # Deactivate the environment once your session is complete
 deactivate
 ```
@@ -38,19 +50,29 @@ Open Command Prompt or PowerShell and execute the following commands sequentiall
 ```bash
 #  Navigate to your root project directory
 cd path_to_the_project
+```
 
+```bash
 # Initialize a virtual environment named 'hcai_env'
 python -m venv hcai_env
+```
 
+```bash
 # Activate the virtual environment
 .\hcai_env\Scripts\activate
+```
 
-# Move into the 'project1' directory containing the source code
-cd project1
+```bash
+# Move into the project directory containing the source code
+cd path_to_project_directory
+```
 
+```bash
 # Install the required project dependencies
 pip install -r requirements.txt
+```
 
+```bash
 # Deactivate the environment once your session is complete
 deactivate
 ```
@@ -60,25 +82,37 @@ deactivate
 This method is platform-independent and works across Windows, MacOS, and Linux. Open your terminal or Conda Prompt and execute the following commands sequentially:
 
 ```bash
-# 1. Create a new conda environment named 'hcai_env' using Python 3.12 
+# Create a new conda environment named 'hcai_env' using Python 3.12 
 conda create --name hcai_env python=3.12 -y
-
-# 2. Activate the newly created environment
-conda activate hcai_env
-
-# 3. Move into the 'project1' directory containing the source code
-cd path_to_the_project/project1
-
-# 4. Install the required project dependencies
-# Option A: Standard Pip installation (Recommended for mixed Django/ML environments)
-pip install -r requirements.txt
-# Option B: Native Conda installation
-conda install --file requirements.txt
-
-# 5. Deactivate the environment when you are done working
-conda deactivate
 ```
 
+```bash
+# Activate the newly created environment
+conda activate hcai_env
+```
+
+```bash
+# Move into the project directory containing the source code
+cd path_to_the_project
+```
+
+# Install the required project dependencies
+
+```bash 
+# Option A: Standard Pip installation (Recommended for mixed Django/ML environments)
+pip install -r requirements.txt
+```
+
+```bash 
+# Option B: Native Conda installation
+conda install --file requirements.txt
+```
+
+# Deactivate the environment when you are done working
+
+```bash 
+conda deactivate
+```
 
 ## Used Library Versions Guide
 
