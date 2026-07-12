@@ -29,7 +29,8 @@ cd project_folder
 pip install -r requirements.txt
 
 # 6. Deactivate the environment once your session is complete
-deactivate```
+deactivate
+```
 
 Windows OS
 Open Command Prompt or PowerShell and execute the following commands sequentially:
