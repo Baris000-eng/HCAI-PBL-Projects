@@ -2,6 +2,20 @@ This is the repository including Django-Based Human-Centric Artificial Intellige
 
 # How to Get Started with Development? 
 
+## Used Library Versions Guide
+
+### Used Python Version: Python 3.12.2
+### Used Django Version (django): 5.2.7
+### Used Scikit-Learn Version (scikit-learn): 1.7.2
+### Used Datasets Library Version (datasets): 4.2.0
+### Used Matplotlib Library Version (matplotlib): 3.10.9
+### Used Palmerpenguins Library Version (palmerpenguins): 0.1.6
+### Used Graphviz Library Version (graphviz): 0.21
+### Used Pandas Library Version (pandas): 2.3.3
+### Used Bottleneck Library Version (bottleneck): 1.6.0
+
+
+
 ## Step 1: How to fork the GitHub repository for own usage? 
 
 1. Open your browser and go to the GitHub repository to be forked: https://github.com/ppaamm/HCAI-PBL

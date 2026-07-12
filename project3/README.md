@@ -34,23 +34,25 @@ deactivate
 ### Windows
 Open your Command Prompt or PowerShell and run:
 
-:: 1. Navigate to the project folder
+```bash
+# 1. Navigate to the project folder
 cd path_to_the_project3
 
-:: 2. Create the virtual environment folder named 'hcai_env'
-python -m venv hcai_env
+# 2. Create the virtual environment folder named 'hcai_env'
+python3 -m venv hcai_env
 
-:: 3. Activate the environment
+# 3. Activate the environment
 .\hcai_env\Scripts\activate
 
-:: 4. Navigate to the project3 directory
+# 4. Navigate to the project3 directory
 cd project3
 
-:: 5. Install the required dependencies
+# 5. Install the required dependencies
 pip install -r requirements.txt
 
-:: 6. Deactivate the environment when you are done
+# 6. Deactivate the environment when you are done
 deactivate
+```
 
 ## Method 2: Using conda (Anaconda / Miniconda)
 - Works across all operating systems (Windows, MacOS, Linux).

@@ -4,5 +4,4 @@ scikit-learn
 pandas 
 numexpr 
 bottleneck 
-graphviz 
 django 
