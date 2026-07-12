@@ -5,14 +5,66 @@ This is the repository including Django-Based Human-Centric Artificial Intellige
 ## Used Library Versions Guide
 
 ### Used Python Version: Python 3.12.2
-### Used Django Version (django): 5.2.7
+
+### Used Django Version (django): 5.2.7 
+
+### How to Install? 
+```bash
+pip install django==5.2.7
+```
+
 ### Used Scikit-Learn Version (scikit-learn): 1.7.2
+
+### How to Install?
+```bash
+pip install scikit-learn==1.7.2
+```
+
 ### Used Datasets Library Version (datasets): 4.2.0
+
+### How to Install?
+```bash
+pip install datasets==4.2.0
+```
+
 ### Used Matplotlib Library Version (matplotlib): 3.10.9
+
+### How to Install?
+```bash
+pip install matplotlib==3.10.9
+```
+
+
 ### Used Palmerpenguins Library Version (palmerpenguins): 0.1.6
+
+### How to Install?
+```bash
+pip install matplotlib==3.10.9
+```
+
+
 ### Used Graphviz Library Version (graphviz): 0.21
+
+### How to Install?
+```bash
+pip install graphviz==0.21
+```
+
+
 ### Used Pandas Library Version (pandas): 2.3.3
+
+### How to Install?
+```bash
+pip install pandas==2.3.3
+```
+
+
 ### Used Bottleneck Library Version (bottleneck): 1.6.0
+
+### How to Install?
+```bash
+pip install bottleneck==1.6.0
+```
 
 
 
