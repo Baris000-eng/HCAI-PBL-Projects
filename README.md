@@ -71,7 +71,8 @@ pip install bottleneck==1.6.0
 
 # Virtual Environment Setup & Dependency Installation
 
-This guide walks you through setting up an isolated Python environment and installing all required libraries for **Project1** (which houses the Django application and ML-based scripts, such as `views.py`). Choose **one** of the configuration paths below depending on your operating system and environment manager preference.
+This guide walks you through setting up an isolated Python environment and installing all required libraries for (each of) our projects. 
+Choose **one** of the configuration paths below depending on your operating system and environment manager preference.
 
 ## Method 1: Using `venv` (Standard Python)
 
@@ -161,7 +162,7 @@ conda activate hcai_env
 cd path_to_the_project
 ```
 
-# Install the required project dependencies
+### Install the required project dependencies
 
 ```bash 
 # Option A: Standard Pip installation (Recommended for mixed Django/ML environments)
@@ -173,7 +174,7 @@ pip install -r requirements.txt
 conda install --file requirements.txt
 ```
 
-# Deactivate the environment when you are done working
+### Deactivate the environment when you are done working
 
 ```bash 
 conda deactivate
