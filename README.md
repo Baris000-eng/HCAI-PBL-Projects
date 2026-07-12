@@ -4,7 +4,7 @@ This is the repository including Django-Based Human-Centric Artificial Intellige
 
 ## Step 1: How to fork the GitHub repository for own usage? 
 
-> Step 0: Please ensure that you are logged into your personal GitHub account before proceeding (e.g. https://github.com/Baris000-eng).
+> Important Note: Please ensure that you are logged into your personal GitHub account before proceeding (e.g. https://github.com/Baris000-eng).
 
 1. Open your browser (Google Chrome is recommended) for and go to the GitHub repository to be forked: https://github.com/ppaamm/HCAI-PBL
 2. In the top-right corner of the page, which is at the left of "Watch" button and right of "Star" button, click the "Fork" button.
