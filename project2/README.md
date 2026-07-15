@@ -1,65 +1,78 @@
-# To install the packages needed, these steps can be followed: 
+# Environment Setup Guide
 
-# Create a virtual environment using conda or venv.
+This guide walks you through setting up a virtual environment and installing the required packages for **Project2**:
 
-### venv virtual environment activation and deactivation in a MacOS / Linux OS ###
-# Navigate to the project folder
-cd path_to_the_project
+Choose **one** of the methods below based on your operating system and package manager preference.
 
-# Create the virtual environment folder, named 'hcai_env'
-python3 (or python) -m venv hcai_env
+---
 
-# Activate the environment
+## Method 1: Using `venv` (Standard Python)
+
+### MacOS / Linux
+Open your terminal and run the following commands:
+
+```bash
+# 1. Create the virtual environment folder named 'hcai_env'
+python3 -m venv hcai_env
+
+# 2. Activate the environment
 source hcai_env/bin/activate
 
-# Go to the folder named "project2", which is at the same level with the folder named "project1" and 
-# which contains django and ML-based Python codes (e.g. load_and_preprocess_data.py). 
+# 3. Navigate to the project2 directory
+cd project2
 
-# To install all libraries needed by Project2 in the virtual environment 'hcai_env', we need to run the following command: 
+# 4. Install the required dependencies
 pip install -r requirements.txt
 
-# Deactivate when you are done
+# 5. Deactivate the environment when you are done
 deactivate
-### venv virtual environment activation and deactivation in a MacOS / Linux OS ###
+```
 
+### Windows
+Open your Command Prompt or PowerShell and run:
 
-### venv virtual environment activation and deactivation in a Windows OS ###
-# Navigate to the project folder
-cd path_to_the_project
+```bash
+# 1. Create the virtual environment folder named 'hcai_env'
+python3 -m venv hcai_env
 
-# Create the virtual environment folder
-python -m venv hcai_env
+# 2. Activate the environment
+.\hcai_env\Scripts\activate
 
-# Activate the environment
-.hcai_env\Scripts\activate
+# 3. Navigate to the project2 directory
+cd project2
 
-# Go to the folder named "project2", which is at the same level with the folder named "project1" and 
-# which contains django and ML-based Python codes (e.g. load_and_preprocess_data.py). 
+# 4. Install the required dependencies
+pip install -r requirements.txt
 
-# To install all libraries needed by Project2 in the virtual environment 'hcai_env', we need to run the following command: 
-pip install -r requirements.txt 
-
-# Deactivate when you are done
+# 5. Deactivate the environment when you are done
 deactivate
-### venv virtual environment activation and deactivation in a Windows OS ###
+```
 
+## Method 2: Using conda (Anaconda / Miniconda)
+- Works across all operating systems (Windows, MacOS, Linux).
 
-### conda #####
+```bash
+# 1. Create the environment named 'hcai_env' with Python 3.12
+conda create --name hcai_env python=3.12 -y
 
-# Create the environment named hcai_env
-conda create --name hcai_env python=3.12
+# 2. Activate the environment
+conda activate hcai_env
 
-# Activate the environment
-conda activate myenv
+# 3. Navigate to the project2 directory
+cd project2
 
-# Go to the folder named "project2", which is at the same level with the folder named "project1" and 
-# which contains django and ML-based Python codes (e.g. load_and_preprocess_data.py). 
+# 4. Install the required dependencies
+# Option A: Using pip (Recommended for mixed Django/ML environments)
+pip install -r requirements.txt
 
-# To install all libraries needed by Project2 in the virtual environment 'hcai_env', we need to run the following command: 
-pip install -r requirements.txt OR conda install --file requirements.txt
+# Option B: Using conda
+conda install --file requirements.txt
 
-# Deactivate when you are done
+# 5. Deactivate the environment when you are done
 conda deactivate
+```
 
-### conda #####
 
+Note on Project Structure:
+The project2 directory is located at the same level as the project1 folder. Ensure you are inside project2 
+before running the dependency installation commands so that pip can locate/find the requirements.txt file.

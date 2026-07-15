@@ -115,7 +115,7 @@ pip install bottleneck==1.6.0
 
 > Important Note: In order to see the libraries used in each project, please look inside the "requirements.txt" file under the directory of each project (e.g. project1).
 
-### Firstly, it is recommended to create a virtual environment to have a working environment specific to our human-centric artificial intelligence projects. 
+> Important Note: It is recommended to create a virtual environment to have a working environment specific to our human-centric artificial intelligence projects. 
 
 # Virtual Environment Setup & Dependency Installation
 
