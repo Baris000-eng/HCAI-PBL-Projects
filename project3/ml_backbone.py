@@ -13,10 +13,6 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from django.http import JsonResponse
-
-
-
 
 class DeferralSystemManager:
     def __init__(self):
@@ -50,8 +46,8 @@ class DeferralSystemManager:
 
         # Active Learning Setup
         self.AL_pool_indices = list(range(len(self.X_train)))
-        print("Number of news in the training dataset: "+str(len(self.X_train))+"")
-        print("Number of news in the testing dataset: "+str(len(self.X_test))+"")
+        print("Number of news in the training dataset: "+str(len(self.X_train))+"\n")
+        print("Number of news in the testing dataset: "+str(len(self.X_test))+"\n")
         
         self.AL_labeled_indices = list(np.random.choice(self.AL_pool_indices, size=2000, replace=False))
         for idx in self.AL_labeled_indices:

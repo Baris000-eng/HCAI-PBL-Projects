@@ -32,5 +32,3 @@ def get_machine_learning_model(model_type, final_seed=42, final_weight=None, num
     else:
         raise ValueError(f"Unsupported model type: {model_type}")
 
-# Usage Example:
-# model = get_machine_learning_model('rfc', final_seed=42, final_weight='balanced')
