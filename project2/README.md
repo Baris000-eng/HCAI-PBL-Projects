@@ -76,3 +76,15 @@ conda deactivate
 Note on Project Structure:
 The project2 directory is located at the same level as the project1 folder. Ensure you are inside project2 
 before running the dependency installation commands so that pip can locate/find the requirements.txt file.
+
+# Project Testing Guide
+In order to test the project2, please run the commands below: 
+
+# 1. Navigate to the "HCAI-PBL-PROJECTS" folder
+```bash
+cd HCAI-PBL-PROJECTS
+```
+# 2. Run the command below to start testing 
+```bash
+python manage.py test 
+```

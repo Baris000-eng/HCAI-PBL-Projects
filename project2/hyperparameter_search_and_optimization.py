@@ -65,8 +65,13 @@ def generate_tree_visualization(best_dt, feature_names, master_classes):
         return ""
     try:
         dot_data = export_graphviz(
-            best_dt, out_file=None, feature_names=feature_names,
-            class_names=master_classes, filled=True, rounded=True, special_characters=True
+            decision_tree=best_dt, 
+            out_file=None, 
+            feature_names=feature_names,
+            class_names=master_classes, 
+            filled=True, 
+            rounded=True, 
+            special_characters=True
         )
         return graphviz.Source(dot_data).pipe(format='svg').decode('utf-8')
     except Exception:
