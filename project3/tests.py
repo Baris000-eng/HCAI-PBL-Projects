@@ -98,7 +98,7 @@ class TestDeferralSystemManager(TestCase):
     def test_process_query_update(self):
         """Tests that processing a user/expert feedback loop successfully updates the active learning cycle."""
         # Get an active index out of the remaining pool
-        self.manager.AL_pool_indices = [3, 4, 5]
+        self.manager.AL_pool_indices = [0, 1, 2, 3]
         target_idx = 3
         chosen_label = 2
         
