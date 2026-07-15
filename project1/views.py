@@ -12,6 +12,7 @@ import json
 import io 
 
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix)
+from .get_model_type import get_machine_learning_model
 
 def index(request):
     if request.method == "POST" and request.FILES.get('csv_file'):
@@ -79,21 +80,12 @@ def train(request):
             final_weight = None if weight_selection == 'none' else 'balanced'
 
             number_of_epochs = int(request.POST.get('iterations', 100))
-
-            if model_type.lower() == 'rfc':
-                model = RandomForestClassifier(random_state=final_seed, class_weight=final_weight)
-            elif model_type.lower() == 'svm': 
-                model = SVC(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
-            elif model_type.lower() == 'knn': 
-                knn_weight = 'distance' if final_weight == 'balanced' else 'uniform'
-                model = KNeighborsClassifier(weights=knn_weight)
-            elif model_type.lower() == 'dtc': 
-                model = DecisionTreeClassifier(random_state=final_seed, class_weight=final_weight)
-            elif model_type.lower() == 'log_reg': 
-                model = LogisticRegression(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
-            elif model_type.lower() == 'sgdc': 
-                model = SGDClassifier(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
-
+            model = get_machine_learning_model(
+                model_type=model_type,
+                final_seed=final_seed,
+                final_weight=final_weight,
+                number_of_epochs=number_of_epochs
+            )
             
             model.fit(X_train, y_train)
 
