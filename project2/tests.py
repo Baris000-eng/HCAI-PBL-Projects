@@ -62,9 +62,10 @@ class OptimizationTestCase(TestCase):
         is_svg = "<svg" in viz 
         is_pre = "<pre" in viz 
         
+        # Handle whether the output of the decision tree visualization is in the expected format of vector graphics, or preformatted text if visualization fails.
         self.assertTrue(
               is_svg or is_pre, 
-            f"Beklenen formatta değil! Gelen değer: {viz}"
+            f"Unexpected format! The value arrived is the following: {viz}"
         )
 
     def test_generate_tree_visualization_none(self):
