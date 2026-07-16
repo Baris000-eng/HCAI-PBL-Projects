@@ -1,19 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import json 
-import io 
 
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix)
 from .get_model_type import get_machine_learning_model
+from .models import UploadedFile, TrainingResult
 
 def index(request):
     if request.method == "POST" and request.FILES.get('csv_file'):
         csv_file = request.FILES['csv_file']
-        df = pd.read_csv(csv_file)
+
+        # Save the file to the database using the UploadedFile model
+        uploaded_file_obj = UploadedFile.objects.create(file=csv_file)
         
-        request.session['df_json'] = df.to_json()
+        # Save the database ID of the file in the session instead of the entire dataset
+        request.session['file_id'] = uploaded_file_obj.id
         
         return redirect('project1:visualize')
 
@@ -22,12 +25,16 @@ def index(request):
 
 def visualize(request):
 
-    df_json = request.session.get('df_json')
+    file_id = request.session.get('file_id')
     
-    if not df_json:
-        return redirect('project1:upload') 
+    if not file_id:
+        return redirect('project1:index') 
 
-    df = pd.read_json(io.StringIO(df_json))
+    # Retrieve the file record from the database
+    uploaded_file_obj = get_object_or_404(UploadedFile, id=file_id)
+    
+    # Read the file from the disk storage using its file path
+    df = pd.read_csv(uploaded_file_obj.file.path)
     
     chart_data = []
     for i in range(min(len(df), 200)): 
@@ -44,10 +51,11 @@ def visualize(request):
 
 def train(request):
     context = {}
-    df_json = request.session.get('df_json')
+    file_id = request.session.get('file_id')
     if request.method == "POST":
-        if df_json:
-            df = pd.read_json(io.StringIO(df_json))
+        if file_id:
+            uploaded_file_obj = get_object_or_404(UploadedFile, id=file_id)
+            df = pd.read_csv(uploaded_file_obj.file.path)
             split_ratio = request.POST.get('split_ratio', 0.2)
             test_set_ratio = float(split_ratio)
             X = df.iloc[:, :-1]
@@ -86,6 +94,40 @@ def train(request):
             # Evaluate the model
             y_pred = model.predict(X_test)
 
+            # Gather metrics values (conditionally check selected_metrics)
+            metrics_data = {
+                'accuracy': accuracy_score(y_test, y_pred) if 'accuracy' in selected_metrics else None,
+                'precision': precision_score(y_test, y_pred, average='weighted') if 'precision' in selected_metrics else None,
+                'recall': recall_score(y_test, y_pred, average='weighted') if 'recall' in selected_metrics else None,
+                'f1_score': f1_score(y_test, y_pred, average='weighted') if 'f1_score' in selected_metrics else None,
+                'classification_report': classification_report(y_test, y_pred) if 'classification_report' in selected_metrics else None,
+                'confusion_matrix': confusion_matrix(y_test, y_pred).tolist() if 'confusion_matrix' in selected_metrics else None,
+            }
+
+            # Create database entry for TrainingResult
+            result = TrainingResult.objects.create(
+                model_type=model_type,
+                split_ratio=split_ratio,
+                random_state=final_seed,
+                epochs=number_of_epochs,
+                accuracy=metrics_data['accuracy'],
+                precision=metrics_data['precision'],
+                recall=metrics_data['recall'],
+                f1_score=metrics_data['f1_score'],
+                classification_report=metrics_data['classification_report'],
+                confusion_matrix=metrics_data['confusion_matrix']
+            )
+
+            # Construct context for rendering template
+            context = {
+                'model_run': True,
+                'model_type': result.model_type,
+                'split_ratio': result.split_ratio,
+                'epochs': result.epochs,
+                # Only send active metrics to template
+                **{k: v for k, v in metrics_data.items() if v is not None} 
+            }
+
             if 'accuracy' in selected_metrics:
                 context['accuracy'] = accuracy_score(y_test, y_pred)
 
@@ -101,8 +143,6 @@ def train(request):
 
             if 'confusion_matrix' in selected_metrics: 
                 context['confusion_matrix'] = confusion_matrix(y_test, y_pred).tolist()
-
-            context['model_run'] = True
 
             return render(request, "project1/results.html", context)
             

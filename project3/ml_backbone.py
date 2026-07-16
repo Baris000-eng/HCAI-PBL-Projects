@@ -219,13 +219,13 @@ class DeferralSystemManager:
         and returns a base64 encoded string to display directly on the dashboard.
         """
         plt.figure(figsize=(10, 5))
-        plt.plot(self.query_history, self.accuracy_history, marker='o', color='#6f42c1')
+        plt.plot(self.query_history, self.accuracy_history, marker='o', color='#purple')
         plt.title("Test Accuracy Growth Graph During Active Learning")
         plt.xlabel("Number of Labeled Samples")
         plt.ylabel("Model's Test Accuracy")
         plt.grid(True)
         
-        # Save to the file system using the strict OS path
+        # Save to the file system 
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         print(f"Plot successfully saved to: {save_path}")
         
