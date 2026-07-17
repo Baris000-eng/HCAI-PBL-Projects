@@ -22,6 +22,7 @@ class DataPreprocessingTestCase(TestCase):
     def test_data_splitting(self):
         total_len = len(self.data['X_train']) + len(self.data['X_test'])
         test_ratio = len(self.data['X_test']) / total_len
+        # Tolerate distortions in the test data splitting 
         self.assertAlmostEqual(test_ratio, 0.3, delta=0.05)
 
     def test_scaling(self):

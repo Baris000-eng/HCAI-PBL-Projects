@@ -2,6 +2,7 @@ import numpy as np
 from palmerpenguins import load_penguins
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from .models import PenguinObservation
 
 
 def load_and_preprocess_data():
@@ -22,6 +23,19 @@ def load_and_preprocess_data():
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
+
+    observations = []
+    for i in range(len(X_test_scaled)):
+        obs = PenguinObservation(
+            bill_length_mm=X_test_scaled[i][0], 
+            bill_depth_mm=X_test_scaled[i][1], 
+            flipper_length_mm=X_test_scaled[i][2],
+            body_mass_g=X_test_scaled[i][3]
+        )
+        observations.append(obs)
+    
+    # Save all to the database at once, this populates the id field for each instance
+    PenguinObservation.objects.bulk_create(observations)
     
     return {
         'X_train': X_train, 
