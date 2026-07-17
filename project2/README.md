@@ -72,13 +72,38 @@ conda install --file requirements.txt
 conda deactivate
 ```
 
-
 Note on Project Structure:
 The project2 directory is located at the same level as the project1 folder. Ensure you are inside project2 
 before running the dependency installation commands so that pip can locate/find the requirements.txt file.
 
+# Project Models Migration and Execution Guide 
+
+## 1. Navigate to the "HCAI-PBL-PROJECTS" folder
+```bash
+cd HCAI-PBL-PROJECTS
+```
+
+## 2. Run the command below to start model migration for project2
+
+### The command below will detect changes in the models.py file of the project2, and create a local blueprint Python file that describes the structural database updates 
+### which are needed, and not yet modifies the database.  
+
+```bash
+python manage.py makemigrations project2
+```
+
+## 3. Run the command below to start the execution of the model changes on the database tables 
+
+### The command below will execute model changes for the project2 by transforming the local blueprint Python files for migration into 
+### real SQL commands, and then modifying the database tables with the SQL commands created. 
+
+```bash
+python manage.py migrate project2
+```
+
 # Project Testing Guide
-In order to test the project2, please run the commands below: 
+Firstly, please write some test cases in the 'tests.py' file. 
+Then, in order to test the project2, please run the commands below: 
 
 # 1. Navigate to the "HCAI-PBL-PROJECTS" folder
 ```bash
@@ -86,5 +111,5 @@ cd HCAI-PBL-PROJECTS
 ```
 # 2. Run the command below to start testing 
 ```bash
-python manage.py test 
+python manage.py test project2
 ```
