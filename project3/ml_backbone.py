@@ -27,6 +27,9 @@ class DeferralSystemManager:
         self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
 
         #self.dataset = load_dataset("fancyzhx/ag_news", keep_in_memory=True)
+
+        # If we already saved the input data to disk, read it from there. If not; please 
+        # load the dataset from the Internet, and then save the loaded data to the local disk. 
         local_dataset_path = "./local_ag_news"
         if os.path.exists(local_dataset_path):
             from datasets import load_from_disk
