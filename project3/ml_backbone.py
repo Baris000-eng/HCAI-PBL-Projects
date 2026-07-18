@@ -2,7 +2,7 @@ import io
 import os 
 import base64
 import numpy as np
-from datasets import load_dataset 
+from datasets import load_from_disk 
 
 
 import matplotlib 
@@ -26,7 +26,9 @@ class DeferralSystemManager:
         
         self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
 
-        self.dataset = load_dataset("fancyzhx/ag_news", keep_in_memory=True)
+        #self.dataset = load_dataset("fancyzhx/ag_news", keep_in_memory=True)
+        self.dataset = load_from_disk("./local_ag_news")
+        print(self.dataset)
 
         # Split the imported data into train and test parts 
         self.X_train_raw =  self.dataset['train']['text']
