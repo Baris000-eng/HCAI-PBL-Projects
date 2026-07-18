@@ -2,7 +2,7 @@ import io
 import os 
 import base64
 import numpy as np
-from datasets import load_from_disk 
+from datasets import load_dataset 
 
 
 import matplotlib 
@@ -27,7 +27,15 @@ class DeferralSystemManager:
         self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
 
         #self.dataset = load_dataset("fancyzhx/ag_news", keep_in_memory=True)
-        self.dataset = load_from_disk("./local_ag_news")
+        local_dataset_path = "./local_ag_news"
+        if os.path.exists(local_dataset_path):
+            from datasets import load_from_disk
+            self.dataset = load_from_disk(local_dataset_path)
+        else: 
+            self.dataset = load_dataset("fancyzhx/ag_news")
+            self.dataset.save_to_disk(local_dataset_path)
+
+
         print(self.dataset)
 
         # Split the imported data into train and test parts 
