@@ -30,5 +30,5 @@ def get_machine_learning_model(model_type, final_seed=42, final_weight=None, num
         return SGDClassifier(random_state=final_seed, class_weight=final_weight, max_iter=number_of_epochs)
     
     else:
-        raise ValueError(f"Unsupported model type: {model_type}")
+        raise ValueError(f"Unsupported model type is detected: {model_type}")
 

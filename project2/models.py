@@ -1,7 +1,7 @@
 from django.db import models
 
 class PenguinObservation(models.Model):
-    # Features used in the model
+    # Features used in the database table model
     bill_length_mm = models.FloatField()
     bill_depth_mm = models.FloatField()
     flipper_length_mm = models.FloatField()

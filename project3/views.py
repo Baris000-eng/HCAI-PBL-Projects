@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .ml_backbone import ml_manager
+from .ml_backbone import get_ml_manager
 
 @csrf_exempt
 def clear_plot(request, save_path="accuracy_growth_graph.png"): 
@@ -17,6 +17,7 @@ def clear_plot(request, save_path="accuracy_growth_graph.png"):
 
 @csrf_exempt
 def trigger_plot_metrics(request):
+    ml_manager = get_ml_manager()
     if request.method == 'POST':
         try:
             current_file_path = os.path.abspath(__file__)
@@ -48,6 +49,7 @@ def trigger_plot_metrics(request):
 
 def index(request):
     """Renders dashboard user interface workspace template context view."""
+    ml_manager = get_ml_manager()
     recent_al_accuracy = ml_manager.accuracy_history[-1]
     recent_total_queries = ml_manager.query_history[-1]
     manual_queries = recent_total_queries - 2000
@@ -60,6 +62,7 @@ def index(request):
 
 def get_metrics(request):
     """Returns baseline statistics."""
+    ml_manager = get_ml_manager()
     if request.method == 'GET':
         return JsonResponse({
             'baseline_accuracy': ml_manager.baseline_acc,
@@ -71,6 +74,7 @@ def get_metrics(request):
 @csrf_exempt
 def learning_to_defer(request):
     """Evaluates combined operational system accuracies based on variable confidence thresholds."""
+    ml_manager = get_ml_manager()
     if request.method == 'POST':
         try:
             data = json.loads(request.body) if request.body else {}
@@ -84,6 +88,7 @@ def learning_to_defer(request):
 
 def al_next_sample(request):
     """Selects next active learning candidate matching uncertainty strategies."""
+    ml_manager = get_ml_manager()
     if request.method == 'GET':
         sample_payload = ml_manager.get_next_uncertain_sample()
         if not sample_payload:
@@ -94,6 +99,7 @@ def al_next_sample(request):
 @csrf_exempt
 def al_query(request):
     """Integrates human annotation inputs to update loop parameters."""
+    ml_manager = get_ml_manager()
     if request.method == 'POST':
         try:
             data = json.loads(request.body) if request.body else {}

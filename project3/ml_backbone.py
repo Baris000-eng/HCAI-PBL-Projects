@@ -4,6 +4,7 @@ import base64
 import numpy as np
 from datasets import load_dataset 
 
+
 import matplotlib 
 
 # Use a non-interactive backend for plotting with matplotlib to avoid GUI issues in server environments 
@@ -14,20 +15,24 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
+ml_manager = None
+
+
 class DeferralSystemManager:
     def __init__(self):
 
         np.random.seed(42)
 
-        # Import the ag_news data
-        dataset = load_dataset("fancyzhx/ag_news")
+        
         self.categories = ['World', 'Sports', 'Business', 'Sci/Tech']
 
+        self.dataset = load_dataset("fancyzhx/ag_news", keep_in_memory=True)
+
         # Split the imported data into train and test parts 
-        self.X_train_raw = dataset['train']['text']
-        self.y_train = np.array(dataset['train']['label'])
-        self.X_test_raw = dataset['test']['text']
-        self.y_test = np.array(dataset['test']['label'])
+        self.X_train_raw =  self.dataset['train']['text']
+        self.y_train = np.array(self.dataset['train']['label'])
+        self.X_test_raw =  self.dataset['test']['text']
+        self.y_test = np.array(self.dataset['test']['label'])
 
         # Text Feature Extraction
         self.vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
@@ -265,6 +270,11 @@ class DeferralSystemManager:
     
 
 
+def get_ml_manager():
+    global ml_manager
+    if ml_manager is None: 
+        ml_manager = DeferralSystemManager()
 
-# Instantiate singleton class instance across the lifecycle
-ml_manager = DeferralSystemManager()
+    return ml_manager
+
+    

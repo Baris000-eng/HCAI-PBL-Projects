@@ -1,6 +1,7 @@
-from ml_backbone import ml_manager 
+from ml_backbone import get_ml_manager 
 
 
+ml_manager = get_ml_manager()
 initial_disagreement = ml_manager.get_disagreement_metrics()
 print(f"Baseline Model Test Accuracy: {ml_manager.baseline_acc:.4f}")
 print(f"Simulated Expert Test Accuracy: {ml_manager.expert_acc:.4f}")

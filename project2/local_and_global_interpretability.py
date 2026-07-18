@@ -5,6 +5,7 @@ import pandas as pd
 def compute_counterfactuals(active_model, data, sample_idx, target_label, model_type, k):
     X_train = data['X_train']
     
+    # To handle inconsistent sample_idx values 
     if sample_idx >= len(X_train) or sample_idx < 0:
         sample_idx = 0
     x_base = X_train.iloc[sample_idx]
