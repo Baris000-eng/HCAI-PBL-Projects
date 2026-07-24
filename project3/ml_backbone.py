@@ -47,19 +47,28 @@ class DeferralSystemManager:
         self.X_test_raw =  self.dataset['test']['text']
         self.y_test = np.array(self.dataset['test']['label'])
 
-        # Text Feature Extraction
+        # Text Feature Extraction from the most frequent 5000 words out of all unique words in the vocabulary 
         self.vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+        print("Starting to extract the input text features for the most frequent 5000 words out of all unique words in the vocabulary ...")
         self.X_train = self.vectorizer.fit_transform(self.X_train_raw).toarray()
         self.X_test = self.vectorizer.transform(self.X_test_raw).toarray()
+        print("Text feature extraction is completed.\n")
+        print("X test dataset is created.")
 
         # Baseline Classifier
         self.baseline_model = LogisticRegression(C=0.4, max_iter=200)
+        print("Starting to train the baseline classifier model ...")
         self.baseline_model.fit(self.X_train, self.y_train)
+        print("Baseline classifier model has been trained.")
+        print("Baseline model prediction started!")
         self.baseline_test_preds = self.baseline_model.predict(self.X_test)
+        print("Baseline model prediction ended!")
         self.baseline_acc = float(accuracy_score(self.y_test, self.baseline_test_preds))
 
         # Simulated Expert
+        print("Simulated expert prediction started!")
         self.expert_test_preds = self.simulate_expert_predict(self.y_test)
+        print("Simulated expert prediction ended!")
         self.expert_acc = float(accuracy_score(self.y_test, self.expert_test_preds))
 
         # Active Learning Setup
@@ -74,6 +83,7 @@ class DeferralSystemManager:
 
         # Active learning model training stage 
         self.active_learning_model = LogisticRegression(C=0.4, max_iter=200)
+        print("Starting to train the active learning model ...")
         self.active_learning_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
 
         self.accuracy_history = [self.active_learning_model.score(self.X_test, self.y_test)]
