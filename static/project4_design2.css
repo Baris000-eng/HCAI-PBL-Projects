@@ -1,0 +1,44 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    padding: 20px;
+    text-align: center;
+}
+
+.rank-list {
+    max-width: 500px;
+    margin: 20px auto;
+    list-style: none;
+    padding: 0;
+}
+
+.rank-item {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.rank-item.dragging {
+    opacity: 0.5;
+}
+
+.btn-submit {
+    padding: 12px 30px;
+    background-color: #2ecc71;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    opacity: 0.9;
+}

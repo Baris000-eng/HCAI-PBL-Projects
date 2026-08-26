@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Design 2: Rank 10 Movies</title>
+    <link rel="stylesheet" href="{% static 'css/project4_design2.css' %}">
+</head>
+<body>
+    <h2>Design 2: Rank the Movies</h2>
+    <p>Drag and drop the items to rank them from <strong>Most Preferred (Top)</strong> to <strong>Least Preferred (Bottom)</strong>.</p>
+
+    <ul class="rank-list" id="sortableList">
+        {% for movie in movies %}
+        <li class="rank-item" draggable="true" data-id="{{ movie.id }}">
+            <span><strong>{{ movie.title }}</strong> ({{ movie.year }}) - {{ movie.genre }}</span>
+            <small>★ {{ movie.score }}</small>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <button class="btn-submit" onclick="submitRanking()">Submit Rankings</button>
+    
+     <script src="/static/project4_design2.js"></script>
+</body>
+</html>
