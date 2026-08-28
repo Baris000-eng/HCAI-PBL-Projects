@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Preference Elicitation Study</title>
-    <link rel="stylesheet" href="{% static 'css/project4_landing.css' %}">
+    <link rel="stylesheet" href="/static/project4_landing.css">
 </head>
 <body>
     <div class="card">
@@ -12,9 +12,9 @@
         <p>Choose an interface design below to participate in the preference elicitation study or download the study design documentation.</p>
         
         <div class="btn-group">
-            <a href="{% url 'download_pdf' %}" class="btn btn-outline">📄 Download PDF Report (Tasks 1-3)</a>
-            <a href="{% url 'design1' %}" class="btn btn-primary">Start Study: Design 1 (Pairwise Choice)</a>
-            <a href="{% url 'design2' %}" class="btn btn-secondary">Start Study: Design 2 (10-Item Ranking)</a>
+            <a href="{% url 'project4:download_pdf' %}" class="btn btn-outline">📄 Download PDF Report (Tasks 1-3)</a>
+            <a href="{% url 'project4:design1' %}" class="btn btn-primary">Start Study: Design 1 (Pairwise Choice)</a>
+            <a href="{% url 'project4:design2' %}" class="btn btn-secondary">Start Study: Design 2 (10-Item Ranking)</a>
         </div>
     </div>
 </body>

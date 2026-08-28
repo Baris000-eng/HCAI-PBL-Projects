@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Design 1: Pairwise Choice</title>
-    <link rel="stylesheet" href="{% static 'css/project4_design1.css' %}">
+     <link rel="stylesheet" href="/static/project4_design1.css">
 </head>
 <body>
     <h2>Design 1: Choose Your Preferred Movie</h2>
@@ -20,6 +20,12 @@
         </div>
         {% endfor %}
     </div>
+
+    <div style="margin-top: 20px; font-family: monospace;">
+        <p><strong>Updated User Vector (w):</strong> <span id="vector-display">--</span></p>
+    </div>
+
+    
     <script src="/static/project4_design1.js"></script>
 </body>
 </html>
