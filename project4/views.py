@@ -18,7 +18,7 @@ def load_and_process_local_dataset(file_path=file_path):
     df = dataset['train'].to_pandas()
     df = df.dropna(subset=['movie_title', 'genres', 'imdb_score'])
     
-    cv = CountVectorizer(tokenizer=lambda text: text.split('|'), lowercase=False)
+    cv = CountVectorizer(tokenizer=lambda text: text.split('|'), token_pattern=None, lowercase=False)
     genre_matrix = cv.fit_transform(df['genres']).toarray()
     
     scaler = MinMaxScaler()
