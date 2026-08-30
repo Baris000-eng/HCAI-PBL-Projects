@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: lightblue;
     padding: 20px;
     text-align: center;
 }
@@ -14,8 +14,8 @@ body {
 
 .movie-card {
     width: 250px;
-    background-color: #ffffff;
-    border: 2px solid #dddddd;
+    background-color: lightgreen;
+    border: 2px solid lightgreen;
     border-radius: 8px;
     padding: 20px;
     cursor: pointer;
@@ -24,7 +24,7 @@ body {
 
 .movie-card:hover {
     transform: translateY(-5px);
-    border-color: #3498db;
+    border-color: green;
 }
 
 .movie-card h3 {

@@ -9,6 +9,10 @@
 <body>
     <h2>Design 1: Choose Your Preferred Movie</h2>
     <p>Which of these two movies would you rather watch?</p>
+    
+    <!-- Round Indicator Element -->
+    <h4>Total Rounds: 5</h4>
+    <div id="round-indicator" class="round-indicator">Round 1 of 5</div>
 
     <div class="container">
         {% for movie in movies %}
@@ -27,6 +31,6 @@
         const CSRF_TOKEN = "{{ csrf_token }}";
     </script>
 
-    <script src="/static/project4_design1.js"></script>
+    <script src="{% static 'project4_design1.js' %}"></script>
 </body>
 </html>
