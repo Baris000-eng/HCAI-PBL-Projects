@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Movies</title>
+    <link rel="stylesheet" href="{% static 'project4_recommended_movies.css' %}">
+</head>
+<body>
+    <div class="card">
+        <h1>Your Top Movie Recommendations</h1>
+        <p>Based on your preference choices, our model ($U(x) = w^T x$) calculated the following top matches for you:</p>
+
+        <!-- Display User Preference Vector Summary -->
+        <div style="margin: 20px 0; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
+            <p><strong>Learned Preference Vector ($w$):</strong></p>
+            <code style="word-break: break-all;">{{ user_vector }}</code>
+        </div>
+
+        <!-- Recommendations Table -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="border-bottom: 2px solid #ccc; text-align: left;">
+                    <th style="padding: 10px;">#</th>
+                    <th style="padding: 10px;">Title</th>
+                    <th style="padding: 10px;">Year</th>
+                    <th style="padding: 10px;">Genre</th>
+                    <th style="padding: 10px;">IMDb Score</th>
+                    <th style="padding: 10px;">Utility Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in recommendations %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px;"><strong>{{ forloop.counter }}</strong></td>
+                    <td style="padding: 10px;">{{ movie.title }}</td>
+                    <td style="padding: 10px;">{{ movie.year }}</td>
+                    <td style="padding: 10px;">{{ movie.genre }}</td>
+                    <td style="padding: 10px;">⭐ {{ movie.score }}</td>
+                    <td style="padding: 10px;"><strong>{{ movie.utility }}</strong></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 10px; text-align: center;">No recommendations available. Please complete a study first.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Navigation Buttons -->
+        <div class="btn-group" style="margin-top: 25px;">
+            <a href="{% url 'project4:index' %}" class="btn btn-outline">Back to Home</a>
+            <a href="{% url 'project4:design1' %}" class="btn btn-primary">Retake Design 1</a>
+            <a href="{% url 'project4:design2' %}" class="btn btn-secondary">Retake Design 2</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Design 1: Pairwise Choice</title>
-     <link rel="stylesheet" href="/static/project4_design1.css">
+    <link rel="stylesheet" href="{% static 'project4_design1.css' %}">
 </head>
 <body>
     <h2>Design 1: Choose Your Preferred Movie</h2>
@@ -20,6 +20,12 @@
         </div>
         {% endfor %}
     </div>
+
+    <script>
+        const DESIGN1_URL = "{% url 'project4:design1' %}";
+        const RECOMMENDATIONS_URL = "{% url 'project4:recommendations' %}";
+        const CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
 
     <script src="/static/project4_design1.js"></script>
 </body>

@@ -1,0 +1,178 @@
+/* --- Global Styles & CSS Variables --- */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #06b6d4;
+    --secondary-hover: #0891b2;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* --- Container Card --- */
+.card {
+    background-color: var(--card-bg);
+    max-width: 900px;
+    width: 100%;
+    padding: 35px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* --- Preference Vector Box --- */
+.card > div:first-of-type {
+    background-color: #f1f5f9 !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin: 20px 0 !important;
+}
+
+.card > div:first-of-type p {
+    color: var(--text-main);
+    margin-bottom: 5px;
+}
+
+code {
+    font-family: "Fira Code", Monaco, Consolas, "Courier New", monospace;
+    background-color: #e2e8f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #0f172a;
+    font-size: 0.9rem;
+}
+
+/* --- Recommendation Table --- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 25px !important;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+thead tr {
+    background-color: #f8fafc;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+th {
+    padding: 14px 16px !important;
+    font-weight: 600;
+    color: var(--text-main);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+td {
+    padding: 14px 16px !important;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+/* Highlighted Utility & Counter */
+td strong {
+    color: var(--primary-color);
+}
+
+/* --- Navigation Buttons --- */
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px !important;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-outline:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+

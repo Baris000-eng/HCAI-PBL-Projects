@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Design 2: Rank 10 Movies</title>
-     <link rel="stylesheet" href="/static/project4_design2.css">
+    <link rel="stylesheet" href="{% static 'project4_design2.css' %}">
 </head>
 <body>
     <h2>Design 2: Rank the Movies</h2>
@@ -20,7 +20,11 @@
     </ul>
 
     <button class="btn-submit" onclick="submitRanking()">Submit Rankings</button>
-    
+    <script>
+        const DESIGN2_URL = "{% url 'project4:design2' %}";
+        const RECOMMENDATIONS_URL = "{% url 'project4:recommendations' %}";
+        const CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
      <script src="/static/project4_design2.js"></script>
 </body>
 </html>

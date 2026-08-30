@@ -1,28 +1,43 @@
-const list = document.getElementById('sortableList');
-let dragItem = null;
+document.addEventListener('DOMContentLoaded', () => {
+    const list = document.getElementById('sortableList');
+    let draggedItem = null;
 
-list.addEventListener('dragstart', (e) => {
-    dragItem = e.target;
-    e.target.classList.add('dragging');
-});
+    if (list) {
+        // Handle drag start
+        list.addEventListener('dragstart', (e) => {
+            draggedItem = e.target.closest('.rank-item');
+            if (draggedItem) {
+                draggedItem.classList.add('dragging');
+            }
+        });
 
-list.addEventListener('dragend', (e) => {
-    e.target.classList.remove('dragging');
-});
+        // Handle drag end
+        list.addEventListener('dragend', () => {
+            if (draggedItem) {
+                draggedItem.classList.remove('dragging');
+                draggedItem = null;
+            }
+        });
 
-list.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(list, e.clientY);
-    if (afterElement == null) {
-        list.appendChild(dragItem);
-    } else {
-        list.insertBefore(dragItem, afterElement);
+        // Reorder items in real time as user drags
+        list.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(list, e.clientY);
+            if (draggedItem) {
+                if (afterElement == null) {
+                    list.appendChild(draggedItem);
+                } else {
+                    list.insertBefore(draggedItem, afterElement);
+                }
+            }
+        });
     }
 });
 
+// Helper function to calculate the position based on vertical cursor coordinates
 function getDragAfterElement(container, y) {
-    const elements = [...container.querySelectorAll('.rank-item:not(.dragging)')];
-    return elements.reduce((closest, child) => {
+    const draggableElements = [...container.querySelectorAll('.rank-item:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
         if (offset < 0 && offset > closest.offset) {
@@ -33,14 +48,26 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
+// Triggered by onclick="submitRanking()" in design2.html
 function submitRanking() {
-    const ranking = [...list.querySelectorAll('.rank-item')].map(item => item.dataset.id);
-    fetch("{% url 'design2' %}", {
+    const items = document.querySelectorAll('#sortableList .rank-item');
+    const rankedIds = Array.from(items).map(item => parseInt(item.getAttribute('data-id')));
+
+    fetch(DESIGN2_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}"
+            "X-CSRFToken": CSRF_TOKEN
         },
-        body: JSON.stringify({ ranking: ranking })
-    }).then(() => alert("Rankings submitted successfully!"));
+        body: JSON.stringify({
+            ranked_ids: rankedIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            window.location.href = RECOMMENDATIONS_URL;
+        }
+    })
+    .catch(error => console.error('Error submitting ranking:', error));
 }

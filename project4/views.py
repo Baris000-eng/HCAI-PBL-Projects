@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, Http404
 from datasets import load_dataset
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
@@ -9,7 +9,6 @@ import numpy as np
 import random
 import os
 import json
-
 
 file_path = os.path.join(settings.BASE_DIR, 'project4', 'movie_metadata.csv')
 
@@ -39,6 +38,9 @@ def load_and_process_local_dataset(file_path=file_path):
     return movies
 
 ALL_MOVIES = load_and_process_local_dataset(file_path)
+
+# Lookup map for quick access to movie data by the ID value
+MOVIE_MAP = {m['id']: m for m in ALL_MOVIES}
 D = len(ALL_MOVIES[0]['feature_vector']) if ALL_MOVIES else 10
 
 def get_random_movies_from_dataset(n=10):
@@ -60,10 +62,10 @@ def design1_view(request):
         
         w = get_or_init_user_vector(request)
         
-        x_a = np.array(next(m['feature_vector'] for m in ALL_MOVIES if m['id'] == chosen_id))
-        x_b = np.array(next(m['feature_vector'] for m in ALL_MOVIES if m['id'] == other_id))
+        x_a = np.array(MOVIE_MAP[chosen_id]['feature_vector'])
+        x_b = np.array(MOVIE_MAP[other_id]['feature_vector'])
 
-        # Update user preference vector using Bradley-Terry model 
+        # Update the user preference vector w using Bradley-Terry algorithm 
         lr_val = 0.05 
         w = bradley_terry_update(w, x_a, x_b, lr=lr_val)
         
@@ -81,22 +83,22 @@ def design2_view(request):
         w = get_or_init_user_vector(request)
         lr_val = 0.005
         
-        # Compute utility scores dictionary for all movies
         utility_scores = {m['id']: np.dot(w, m['feature_vector']) for m in ALL_MOVIES}
-        
-        # Call plackett_luce_probability using ranked_ids and utility_scores
         ranking_prob = plackett_luce_probability(ranked_ids, utility_scores)
         
-        current_pool = [np.array(next(m['feature_vector'] for m in ALL_MOVIES if m['id'] == mid)) for mid in ranked_ids]
+        current_pool = [np.array(MOVIE_MAP[mid]['feature_vector']) for mid in ranked_ids]
         
         grad = np.zeros_like(w)
         for k in range(len(current_pool)):
             x_k = current_pool[k]
             remaining_pool = current_pool[k:]
             
-            exp_utilities = np.array([np.exp(np.dot(w, x)) for x in remaining_pool])
-            sum_exp = np.sum(exp_utilities)
+            # numeric stability for softmax computation
+            dots = np.array([np.dot(w, x) for x in remaining_pool])
+            dots_shift = dots - np.max(dots)
+            exp_utilities = np.exp(dots_shift)
             
+            sum_exp = np.sum(exp_utilities)
             expected_x = np.sum([exp_utilities[j] * remaining_pool[j] for j in range(len(remaining_pool))], axis=0) / sum_exp
             grad += (x_k - expected_x)
             
@@ -111,16 +113,45 @@ def design2_view(request):
     context = {'movies': get_random_movies_from_dataset(10)}
     return render(request, 'project4/design2.html', context)
 
+def recommendations_view(request, top_n=10):
+    """This function recommends the top N movies with the highest utility scores based on the user's preference vector (w)."""
+    w = get_or_init_user_vector(request)
+    
+    scored_movies = []
+    for movie in ALL_MOVIES:
+        u_val = float(np.dot(w, np.array(movie['feature_vector'])))
+        scored_movies.append({
+            'id': movie['id'],
+            'title': movie['title'],
+            'year': movie['year'],
+            'genre': movie['genre'],
+            'score': movie['score'],
+            'utility': round(u_val, 4)
+        })
+    
+    # Sort the utility values in descending order
+    recommended = sorted(scored_movies, key=lambda x: x['utility'], reverse=True)[:top_n]
+    
+    context = {
+        'recommendations': recommended,
+        'user_vector': [round(v, 4) for v in w.tolist()]
+    }
+    return render(request, 'project4/recommended_movies.html', context)
+
 def download_pdf(request):
-    pdf_path = os.path.join('static', 'pdf', 'project_report.pdf')
-    return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+    pdf_path = os.path.join(settings.BASE_DIR, 'project4', 'static', 'pdf', 'project_report.pdf')
+    if os.path.exists(pdf_path):
+        return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+    raise Http404("Report PDF not found.")
 
 def bradley_terry_update(w, x_a, x_b, lr=0.05):
     u_a = np.dot(w, x_a)
     u_b = np.dot(w, x_b)
     
-    exp_a = np.exp(u_a)
-    exp_b = np.exp(u_b)
+    # Numeric stability 
+    max_u = max(u_a, u_b)
+    exp_a = np.exp(u_a - max_u)
+    exp_b = np.exp(u_b - max_u)
     
     grad = x_a - (exp_a * x_a + exp_b * x_b) / (exp_a + exp_b)
     return w + lr * grad
@@ -129,7 +160,11 @@ def plackett_luce_probability(ranked_ids, utility_scores_dict):
     prob = 1.0
     current_pool = list(ranked_ids)
     for i in ranked_ids:
-        exp_utilities = np.array([np.exp(utility_scores_dict[j]) for j in current_pool])
-        prob *= np.exp(utility_scores_dict[i]) / np.sum(exp_utilities)
+        raw_utilities = np.array([utility_scores_dict[j] for j in current_pool])
+        max_u = np.max(raw_utilities)
+        exp_utilities = np.exp(raw_utilities - max_u)
+        
+        target_exp = np.exp(utility_scores_dict[i] - max_u)
+        prob *= target_exp / np.sum(exp_utilities)
         current_pool.remove(i)
     return prob
