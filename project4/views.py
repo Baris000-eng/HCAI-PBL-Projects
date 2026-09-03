@@ -138,12 +138,6 @@ def recommendations_view(request, top_n=10):
     }
     return render(request, 'project4/recommended_movies.html', context)
 
-def download_pdf(request):
-    pdf_path = os.path.join(settings.BASE_DIR, 'project4', 'static', 'pdf', 'project_report.pdf')
-    if os.path.exists(pdf_path):
-        return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
-    raise Http404("Report PDF not found.")
-
 def bradley_terry_update(w, x_a, x_b, lr=0.05):
     u_a = np.dot(w, x_a)
     u_b = np.dot(w, x_b)
@@ -168,3 +162,4 @@ def plackett_luce_probability(ranked_ids, utility_scores_dict):
         prob *= target_exp / np.sum(exp_utilities)
         current_pool.remove(i)
     return prob
+

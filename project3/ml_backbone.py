@@ -83,8 +83,9 @@ class DeferralSystemManager:
 
         # Active learning model training stage 
         self.active_learning_model = LogisticRegression(C=0.4, max_iter=200)
-        print("Starting to train the active learning model ...")
+        print("Starting to train the active learning (Logistic Regression) model for inverse regularization strength of 0.4 and number of epochs of 200 ...")
         self.active_learning_model.fit(self.X_train[self.AL_labeled_indices], self.y_train[self.AL_labeled_indices])
+        print("Active learning (Logistic Regression) model has been trained.")
 
         self.accuracy_history = [self.active_learning_model.score(self.X_test, self.y_test)]
         self.query_history = [len(self.AL_labeled_indices)]

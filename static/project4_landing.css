@@ -61,3 +61,24 @@ p {
 .btn:hover {
     opacity: 0.9;
 }
+
+.download-report-link {
+    text-decoration: none;
+}
+
+.download-report-button {
+    margin-top: 10px;
+    background-color: lightblue;
+    color: black;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    width: 200px;
+    height: 70px;
+}
+
+.download-report-button:hover {
+    background-color: skyblue;
+}
+
