@@ -1,12 +1,6 @@
-/* --- Global Styles & CSS Variables --- */
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --secondary-color: #06b6d4;
-    --secondary-hover: #0891b2;
-    --bg-color: lightblue;
+    --bg-color: white;
     --card-bg: lightgreen;
-    --text-main: #1e293b;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
     --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -17,13 +11,13 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: lightblue;
+    background-color: white;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
+    background-color: white;
+    color: black;
     line-height: 1.6;
     display: flex;
     justify-content: center;
@@ -34,7 +28,7 @@ body {
 
 /* --- Container Card --- */
 .card {
-    background-color: var(--card-bg);
+    background-color: white;
     max-width: 900px;
     width: 100%;
     padding: 35px;
@@ -45,7 +39,7 @@ body {
 
 h1 {
     font-size: 1.8rem;
-    color: var(--text-main);
+    color: black;
     margin-bottom: 10px;
 }
 
@@ -57,7 +51,7 @@ p {
 
 /* --- Preference Vector Box --- */
 .card > div:first-of-type {
-    background-color: #f1f5f9 !important;
+    background-color: white!important;
     border: 1px solid var(--border-color);
     border-radius: 8px !important;
     padding: 15px !important;
@@ -65,13 +59,13 @@ p {
 }
 
 .card > div:first-of-type p {
-    color: var(--text-main);
+    color: black;
     margin-bottom: 5px;
 }
 
 code {
     font-family: "Fira Code", Monaco, Consolas, "Courier New", monospace;
-    background-color: #e2e8f0;
+    background-color: white;
     padding: 4px 8px;
     border-radius: 4px;
     color: #0f172a;
@@ -90,14 +84,14 @@ table {
 }
 
 thead tr {
-    background-color: #f8fafc;
+    background-color: white;
     border-bottom: 2px solid var(--border-color) !important;
 }
 
 th {
     padding: 14px 16px !important;
     font-weight: 600;
-    color: var(--text-main);
+    color: black;
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.05em;
@@ -112,18 +106,18 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-    background-color: #f8fafc;
+    background-color: white;
 }
 
 td {
     padding: 14px 16px !important;
     font-size: 0.95rem;
-    color: var(--text-main);
+    color: black;
 }
 
 /* Highlighted Utility & Counter */
 td strong {
-    color: var(--primary-color);
+    color: black;
 }
 
 /* --- Navigation Buttons --- */
@@ -143,36 +137,31 @@ td strong {
     font-size: 0.95rem;
     font-weight: 500;
     text-decoration: none;
-    transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    color: #ffffff;
+    background-color: lightblue;
+    color: black;
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
+    background-color: skyblue;
 }
 
 .btn-secondary {
-    background-color: var(--secondary-color);
-    color: #ffffff;
+    background-color: lightblue;
+    color: black;
 }
 
 .btn-secondary:hover {
-    background-color: var(--secondary-hover);
+    background-color: skyblue;
 }
 
 .btn-outline {
-    background-color: transparent;
+    background-color: white;
     border: 1px solid var(--border-color);
-    color: var(--text-main);
+    color: black;
 }
 
-.btn-outline:hover {
-    background-color: #f1f5f9;
-    border-color: #cbd5e1;
-}
 
