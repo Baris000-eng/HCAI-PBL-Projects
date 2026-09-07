@@ -151,15 +151,15 @@ def bradley_terry_update(w, x_a, x_b, lr=0.05):
     return w + lr * grad
 
 def plackett_luce_probability(ranked_ids, utility_scores_dict):
-    prob = 1.0
+    probability = 1.0
     current_pool = list(ranked_ids)
     for i in ranked_ids:
         raw_utilities = np.array([utility_scores_dict[j] for j in current_pool])
-        max_u = np.max(raw_utilities)
-        exp_utilities = np.exp(raw_utilities - max_u)
+        max_utility = np.max(raw_utilities)
+        exp_utilities = np.exp(raw_utilities - max_utility)
         
-        target_exp = np.exp(utility_scores_dict[i] - max_u)
-        prob *= target_exp / np.sum(exp_utilities)
+        target_exp = np.exp(utility_scores_dict[i] - max_utility)
+        probability *= target_exp / np.sum(exp_utilities)
         current_pool.remove(i)
-    return prob
+    return probability
 
