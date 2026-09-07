@@ -143,12 +143,12 @@ def bradley_terry_update(w, x_a, x_b, lr=0.05):
     u_b = np.dot(w, x_b)
     
     # Numeric stability 
-    max_u = max(u_a, u_b)
-    exp_a = np.exp(u_a - max_u)
-    exp_b = np.exp(u_b - max_u)
+    max_utility = max(u_a, u_b)
+    exp_a = np.exp(u_a - max_utility)
+    exp_b = np.exp(u_b - max_utility)
     
-    grad = x_a - (exp_a * x_a + exp_b * x_b) / (exp_a + exp_b)
-    return w + lr * grad
+    gradient_value = x_a - (exp_a * x_a + exp_b * x_b) / (exp_a + exp_b)
+    return w + lr * gradient_value
 
 def plackett_luce_probability(ranked_ids, utility_scores_dict):
     probability = 1.0
