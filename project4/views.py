@@ -126,7 +126,7 @@ def recommendations_view(request, top_n=10):
             'year': movie['year'],
             'genre': movie['genre'],
             'score': movie['score'],
-            'utility': round(u_val, 4)
+            'utility': round(u_val, 5)
         })
     
     # Sort the utility values in descending order
@@ -134,7 +134,7 @@ def recommendations_view(request, top_n=10):
     
     context = {
         'recommendations': recommended,
-        'user_vector': [round(v, 4) for v in w.tolist()]
+        'user_vector': [round(v, 5) for v in w.tolist()]
     }
     return render(request, 'project4/recommended_movies.html', context)
 
@@ -142,7 +142,7 @@ def bradley_terry_update(w, x_a, x_b, lr=0.05):
     u_a = np.dot(w, x_a)
     u_b = np.dot(w, x_b)
     
-    # Numeric stability 
+    # Subtract the maximum utility for numeric stability
     max_utility = max(u_a, u_b)
     exp_a = np.exp(u_a - max_utility)
     exp_b = np.exp(u_b - max_utility)
@@ -156,6 +156,8 @@ def plackett_luce_probability(ranked_ids, utility_scores_dict):
     for i in ranked_ids:
         raw_utilities = np.array([utility_scores_dict[j] for j in current_pool])
         max_utility = np.max(raw_utilities)
+
+        # Subtract the maximum utility for numeric stability
         exp_utilities = np.exp(raw_utilities - max_utility)
         
         target_exp = np.exp(utility_scores_dict[i] - max_utility)
