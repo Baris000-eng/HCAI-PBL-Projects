@@ -81,17 +81,17 @@ def design2_view(request):
         ranked_ids = [int(i) for i in data.get('ranked_ids')]
         
         w = get_or_init_user_vector(request)
-        lr_val = 0.005
+        learning_rate = 0.005
         
         utility_scores = {m['id']: np.dot(w, m['feature_vector']) for m in ALL_MOVIES}
         ranking_prob = plackett_luce_probability(ranked_ids, utility_scores)
         
         current_pool = [np.array(MOVIE_MAP[mid]['feature_vector']) for mid in ranked_ids]
         
-        grad = np.zeros_like(w)
-        for k in range(len(current_pool)):
-            x_k = current_pool[k]
-            remaining_pool = current_pool[k:]
+        gradient_value = np.zeros_like(w)
+        for m in range(len(current_pool)):
+            x_m = current_pool[m]
+            remaining_pool = current_pool[m:]
             
             # numeric stability for softmax computation
             dots = np.array([np.dot(w, x) for x in remaining_pool])
@@ -100,9 +100,10 @@ def design2_view(request):
             
             sum_exp = np.sum(exp_utilities)
             expected_x = np.sum([exp_utilities[j] * remaining_pool[j] for j in range(len(remaining_pool))], axis=0) / sum_exp
-            grad += (x_k - expected_x)
-            
-        w += lr_val * grad
+            diff_vector = x_m - expected_x
+            gradient_value += diff_vector
+
+        w += learning_rate * gradient_value
         request.session['user_w'] = w.tolist()
         return JsonResponse({
             'status': 'success', 
