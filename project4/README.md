@@ -1,0 +1,114 @@
+# Environment Setup Guide
+
+This guide walks you through setting up a virtual environment and installing the required packages for **Project4**:
+
+Choose **one** of the methods below based on your operating system and package manager preference.
+
+---
+
+## Method 1: Using `venv` (Standard Python)
+
+### MacOS / Linux
+Open your terminal and run the following commands:
+
+```bash
+# 1. Create the virtual environment folder named 'hcai_env'
+python3 -m venv hcai_env
+
+# 2. Activate the environment
+source hcai_env/bin/activate
+
+# 3. Navigate to the project4 directory
+cd project4
+
+# 4. Install the required dependencies
+pip install -r requirements.txt
+
+# 5. Deactivate the environment when you are done
+deactivate
+```
+
+### Windows
+Open your Command Prompt or PowerShell and run:
+
+```bash
+# 1. Create the virtual environment folder named 'hcai_env'
+python3 -m venv hcai_env
+
+# 2. Activate the environment
+.\hcai_env\Scripts\activate
+
+# 3. Navigate to the project4 directory
+cd project4
+
+# 4. Install the required dependencies
+pip install -r requirements.txt
+
+# 5. Deactivate the environment when you are done
+deactivate
+```
+
+## Method 2: Using conda (Anaconda / Miniconda)
+- Works across all operating systems (Windows, MacOS, Linux).
+
+```bash
+# 1. Create the environment named 'hcai_env' with Python 3.12
+conda create --name hcai_env python=3.12 -y
+
+# 2. Activate the environment
+conda activate hcai_env
+
+# 3. Navigate to the project4 directory
+cd project4
+
+# 4. Install the required dependencies
+# Option A: Using pip (Recommended for mixed Django/ML environments)
+pip install -r requirements.txt
+
+# Option B: Using conda
+conda install --file requirements.txt
+
+# 5. Deactivate the environment when you are done
+conda deactivate
+```
+
+Note on Project Structure:
+The project4 directory is located at the same level as the project2 folder. Ensure you are inside project4 
+before running the dependency installation commands so that pip can locate the requirements.txt file.
+
+# Project Models Migration and Execution Guide 
+
+## 1. Navigate to the "HCAI-PBL-PROJECTS" folder
+```bash
+cd HCAI-PBL-PROJECTS
+```
+
+## 2. Run the command below to start model migration for project4
+
+### The command below will detect changes in the models.py file of the project4, and create a local blueprint Python file that describes the structural database updates which are needed, and not yet modifies the database.  
+
+```bash
+python manage.py makemigrations project4
+```
+
+## 3. Run the command below to start the execution of the model changes on the database tables 
+
+### The command below will execute model changes for the project4 by transforming the local blueprint Python files for migration into 
+### real SQL commands, and then modifying the database tables with the SQL commands created. 
+
+```bash
+python manage.py migrate project4
+```
+
+# Project Testing Guide
+Firstly, please write some test cases in the 'tests.py' file. 
+Then, in order to test the project4, please run the commands below: 
+
+# 1. Navigate to the "HCAI-PBL-PROJECTS" folder
+```bash
+cd HCAI-PBL-PROJECTS
+```
+# 2. Run the command below to start testing 
+```bash
+python manage.py test project4
+```
