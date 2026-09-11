@@ -37,8 +37,9 @@ body {
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .btn-submit:hover {
-    opacity: 0.9;
+    opacity: 0.8;
 }
