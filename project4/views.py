@@ -37,18 +37,18 @@ def load_and_process_local_dataset(file_path=file_path):
         })
     return movies
 
-ALL_MOVIES = load_and_process_local_dataset(file_path)
+movies = load_and_process_local_dataset(file_path)
 
 # Lookup map for quick access to movie data by the ID value
-MOVIE_MAP = {m['id']: m for m in ALL_MOVIES}
-D = len(ALL_MOVIES[0]['feature_vector']) if ALL_MOVIES else 10
+movie_map = {m['id']: m for m in movies}
+features_dim = len(movies[0]['feature_vector']) if movies else 10
 
 def get_random_movies_from_dataset(n=10):
-    return random.sample(ALL_MOVIES, min(n, len(ALL_MOVIES)))
+    return random.sample(movies, min(n, len(movies)))
 
 def get_or_init_user_vector(request):
     if 'user_w' not in request.session:
-        request.session['user_w'] = np.zeros(D).tolist()
+        request.session['user_w'] = np.zeros(features_dim).tolist()
     return np.array(request.session['user_w'])
 
 def index(request):
@@ -62,8 +62,8 @@ def design1_view(request):
         
         w = get_or_init_user_vector(request)
         
-        x_a = np.array(MOVIE_MAP[chosen_id]['feature_vector'])
-        x_b = np.array(MOVIE_MAP[other_id]['feature_vector'])
+        x_a = np.array(movie_map[chosen_id]['feature_vector'])
+        x_b = np.array(movie_map[other_id]['feature_vector'])
 
         # Update the user preference vector w using Bradley-Terry algorithm 
         lr_val = 0.05 
@@ -83,10 +83,10 @@ def design2_view(request):
         w = get_or_init_user_vector(request)
         learning_rate = 0.005
         
-        utility_scores = {m['id']: np.dot(w, m['feature_vector']) for m in ALL_MOVIES}
+        utility_scores = {m['id']: np.dot(w, m['feature_vector']) for m in movies}
         ranking_prob = plackett_luce_probability(ranked_ids, utility_scores)
         
-        current_pool = [np.array(MOVIE_MAP[mid]['feature_vector']) for mid in ranked_ids]
+        current_pool = [np.array(movie_map[movie_id]['feature_vector']) for movie_id in ranked_ids]
         
         gradient_value = np.zeros_like(w)
         for m in range(len(current_pool)):
@@ -119,15 +119,15 @@ def recommendations_view(request, top_n=10):
     w = get_or_init_user_vector(request)
     
     scored_movies = []
-    for movie in ALL_MOVIES:
-        u_val = float(np.dot(w, np.array(movie['feature_vector'])))
+    for movie in movies:
+        utility_value = float(np.dot(w, np.array(movie['feature_vector'])))
         scored_movies.append({
             'id': movie['id'],
             'title': movie['title'],
             'year': movie['year'],
             'genre': movie['genre'],
             'score': movie['score'],
-            'utility': round(u_val, 5)
+            'utility': round(utility_value, 5)
         })
     
     # Sort the utility values in descending order
@@ -140,13 +140,13 @@ def recommendations_view(request, top_n=10):
     return render(request, 'project4/recommended_movies.html', context)
 
 def bradley_terry_update(w, x_a, x_b, lr=0.05):
-    u_a = np.dot(w, x_a)
-    u_b = np.dot(w, x_b)
+    utility_a = np.dot(w, x_a)
+    utility_b = np.dot(w, x_b)
     
     # Subtract the maximum utility for numeric stability
-    max_utility = max(u_a, u_b)
-    exp_a = np.exp(u_a - max_utility)
-    exp_b = np.exp(u_b - max_utility)
+    max_utility = max(utility_a, utility_b)
+    exp_a = np.exp(utility_a - max_utility)
+    exp_b = np.exp(utility_b - max_utility)
     
     gradient_value = x_a - (exp_a * x_a + exp_b * x_b) / (exp_a + exp_b)
     return w + lr * gradient_value
