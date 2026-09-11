@@ -1,5 +1,8 @@
 This is the repository including Django-Based Human-Centric Artificial Intelligence Projects. 
 
+# Name - Surname: Barış Kaplan 
+# Lecture: Human-Centric Artificial Intelligence (HCAI)
+
 # How to Get Started with Development? 
 
 ## Step 1: How to fork the GitHub repository for own usage? 
