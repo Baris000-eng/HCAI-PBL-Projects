@@ -20,26 +20,34 @@ class RecommendationSystemTests(TestCase):
             {
                 'id': 1,
                 'title': 'Movie A',
-                'year': 2020,
+                'year': 2018,
                 'genre': 'Action|Thriller',
-                'score': 8.0,
+                'score': 7.1,
                 'feature_vector': [0.0, 1.0, 0.53]  
             },
             {
                 'id': 2,
                 'title': 'Movie B',
-                'year': 2018,
+                'year': 2013,
                 'genre': 'Comedy',
-                'score': 6.5,
+                'score': 6.3,
                 'feature_vector': [1.0, 0.0, 0.65]
             },
             {
                 'id': 3,
                 'title': 'Movie C',
-                'year': 2022,
+                'year': 2020,
                 'genre': 'Action|Comedy',
-                'score': 7.2,
+                'score': 9.4,
                 'feature_vector': [1.0, 1.0, 0.79]
+            }, 
+            {
+                'id': 4,
+                'title': 'Movie D',
+                'year': 2016,
+                'genre': 'Action|Thriller',
+                'score': 8.3,
+                'feature_vector': [0.88, 0.0, 0.67]
             }
         ]
         
